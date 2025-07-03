@@ -2,7 +2,7 @@ using Anthropic = Anthropic;
 using Serialization = System.Text.Json.Serialization;
 using System = System;
 
-namespace Anthropic.Models.Beta.Messages.BetaSearchResultLocationCitationParamProperties;
+namespace Anthropic.Models.Beta.Messages.BetaCitationSearchResultLocationProperties;
 
 [Serialization::JsonConverter(typeof(Anthropic::EnumConverter<Type, string>))]
 public sealed record class Type(string value) : Anthropic::IEnum<Type, string>

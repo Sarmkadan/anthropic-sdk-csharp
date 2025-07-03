@@ -1,5 +1,5 @@
 using Anthropic = Anthropic;
-using BetaSearchResultLocationCitationParamProperties = Anthropic.Models.Beta.Messages.BetaSearchResultLocationCitationParamProperties;
+using BetaCitationSearchResultLocationParamProperties = Anthropic.Models.Beta.Messages.BetaCitationSearchResultLocationParamProperties;
 using CodeAnalysis = System.Diagnostics.CodeAnalysis;
 using Generic = System.Collections.Generic;
 using Json = System.Text.Json;
@@ -9,11 +9,11 @@ using System = System;
 namespace Anthropic.Models.Beta.Messages;
 
 [Serialization::JsonConverter(
-    typeof(Anthropic::ModelConverter<BetaSearchResultLocationCitationParam>)
+    typeof(Anthropic::ModelConverter<BetaCitationSearchResultLocationParam>)
 )]
-public sealed record class BetaSearchResultLocationCitationParam
+public sealed record class BetaCitationSearchResultLocationParam
     : Anthropic::ModelBase,
-        Anthropic::IFromRaw<BetaSearchResultLocationCitationParam>
+        Anthropic::IFromRaw<BetaCitationSearchResultLocationParam>
 {
     public required string CitedText
     {
@@ -110,14 +110,14 @@ public sealed record class BetaSearchResultLocationCitationParam
         set { this.Properties["title"] = Json::JsonSerializer.SerializeToElement(value); }
     }
 
-    public required BetaSearchResultLocationCitationParamProperties::Type Type
+    public required BetaCitationSearchResultLocationParamProperties::Type Type
     {
         get
         {
             if (!this.Properties.TryGetValue("type", out Json::JsonElement element))
                 throw new System::ArgumentOutOfRangeException("type", "Missing required argument");
 
-            return Json::JsonSerializer.Deserialize<BetaSearchResultLocationCitationParamProperties::Type>(
+            return Json::JsonSerializer.Deserialize<BetaCitationSearchResultLocationParamProperties::Type>(
                     element
                 ) ?? throw new System::ArgumentNullException("type");
         }
@@ -129,17 +129,17 @@ public sealed record class BetaSearchResultLocationCitationParam
         this.Type.Validate();
     }
 
-    public BetaSearchResultLocationCitationParam() { }
+    public BetaCitationSearchResultLocationParam() { }
 
 #pragma warning disable CS8618
     [CodeAnalysis::SetsRequiredMembers]
-    BetaSearchResultLocationCitationParam(Generic::Dictionary<string, Json::JsonElement> properties)
+    BetaCitationSearchResultLocationParam(Generic::Dictionary<string, Json::JsonElement> properties)
     {
         Properties = properties;
     }
 #pragma warning restore CS8618
 
-    public static BetaSearchResultLocationCitationParam FromRawUnchecked(
+    public static BetaCitationSearchResultLocationParam FromRawUnchecked(
         Generic::Dictionary<string, Json::JsonElement> properties
     )
     {
