@@ -108,21 +108,21 @@ public sealed record class BetaCitationWebSearchResultLocationParam(
 
 [Serialization::JsonConverter(
     typeof(Anthropic::VariantConverter<
-        BetaSearchResultLocationCitationParam,
-        Messages::BetaSearchResultLocationCitationParam
+        BetaCitationSearchResultLocationParam,
+        Messages::BetaCitationSearchResultLocationParam
     >)
 )]
-public sealed record class BetaSearchResultLocationCitationParam(
-    Messages::BetaSearchResultLocationCitationParam Value
+public sealed record class BetaCitationSearchResultLocationParam(
+    Messages::BetaCitationSearchResultLocationParam Value
 )
     : Messages::BetaTextCitationParam,
         Anthropic::IVariant<
-            BetaSearchResultLocationCitationParam,
-            Messages::BetaSearchResultLocationCitationParam
+            BetaCitationSearchResultLocationParam,
+            Messages::BetaCitationSearchResultLocationParam
         >
 {
-    public static BetaSearchResultLocationCitationParam From(
-        Messages::BetaSearchResultLocationCitationParam value
+    public static BetaCitationSearchResultLocationParam From(
+        Messages::BetaCitationSearchResultLocationParam value
     )
     {
         return new(value);

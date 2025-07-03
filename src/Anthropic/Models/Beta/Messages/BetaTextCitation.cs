@@ -25,8 +25,8 @@ public abstract record class BetaTextCitation
         BetaCitationsWebSearchResultLocation value
     ) => new(value);
 
-    public static BetaTextCitationVariants::BetaSearchResultLocationCitation Create(
-        BetaSearchResultLocationCitation value
+    public static BetaTextCitationVariants::BetaCitationSearchResultLocation Create(
+        BetaCitationSearchResultLocation value
     ) => new(value);
 
     public abstract void Validate();
