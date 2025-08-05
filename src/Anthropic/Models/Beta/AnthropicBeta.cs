@@ -97,4 +97,6 @@ public sealed record class AnthropicBeta(string value) : IEnum<AnthropicBeta, st
     {
         return new(value);
     }
+
+    public static implicit operator AnthropicBeta(string value) => FromRaw(value);
 }

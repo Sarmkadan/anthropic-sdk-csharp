@@ -214,4 +214,6 @@ public sealed record class Model(string value) : IEnum<Model, string>
     {
         return new(value);
     }
+
+    public static implicit operator Model(string value) => FromRaw(value);
 }
