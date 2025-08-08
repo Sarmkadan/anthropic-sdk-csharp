@@ -61,6 +61,25 @@ public sealed record class DocumentBlockParamVariant(DocumentBlockParam Value)
 }
 
 /// <summary>
+/// A search result block containing source, title, and content from search operations.
+/// </summary>
+[JsonConverter(typeof(VariantConverter<SearchResultBlockParamVariant, SearchResultBlockParam>))]
+public sealed record class SearchResultBlockParamVariant(SearchResultBlockParam Value)
+    : ContentBlockParam,
+        IVariant<SearchResultBlockParamVariant, SearchResultBlockParam>
+{
+    public static SearchResultBlockParamVariant From(SearchResultBlockParam value)
+    {
+        return new(value);
+    }
+
+    public override void Validate()
+    {
+        this.Value.Validate();
+    }
+}
+
+/// <summary>
 /// A block specifying internal thinking by the model.
 /// </summary>
 [JsonConverter(typeof(VariantConverter<ThinkingBlockParamVariant, ThinkingBlockParam>))]
