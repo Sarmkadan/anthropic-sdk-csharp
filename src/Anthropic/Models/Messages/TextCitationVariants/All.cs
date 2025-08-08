@@ -76,3 +76,21 @@ public sealed record class CitationsWebSearchResultLocationVariant(
         this.Value.Validate();
     }
 }
+
+[JsonConverter(
+    typeof(VariantConverter<CitationsSearchResultLocationVariant, CitationsSearchResultLocation>)
+)]
+public sealed record class CitationsSearchResultLocationVariant(CitationsSearchResultLocation Value)
+    : TextCitation,
+        IVariant<CitationsSearchResultLocationVariant, CitationsSearchResultLocation>
+{
+    public static CitationsSearchResultLocationVariant From(CitationsSearchResultLocation value)
+    {
+        return new(value);
+    }
+
+    public override void Validate()
+    {
+        this.Value.Validate();
+    }
+}

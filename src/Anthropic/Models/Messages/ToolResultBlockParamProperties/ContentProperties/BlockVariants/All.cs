@@ -33,3 +33,19 @@ public sealed record class ImageBlockParamVariant(ImageBlockParam Value)
         this.Value.Validate();
     }
 }
+
+[JsonConverter(typeof(VariantConverter<SearchResultBlockParamVariant, SearchResultBlockParam>))]
+public sealed record class SearchResultBlockParamVariant(SearchResultBlockParam Value)
+    : Block,
+        IVariant<SearchResultBlockParamVariant, SearchResultBlockParam>
+{
+    public static SearchResultBlockParamVariant From(SearchResultBlockParam value)
+    {
+        return new(value);
+    }
+
+    public override void Validate()
+    {
+        this.Value.Validate();
+    }
+}

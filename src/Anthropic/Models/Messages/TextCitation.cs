@@ -20,5 +20,8 @@ public abstract record class TextCitation
     public static implicit operator TextCitation(CitationsWebSearchResultLocation value) =>
         new TextCitationVariants::CitationsWebSearchResultLocationVariant(value);
 
+    public static implicit operator TextCitation(CitationsSearchResultLocation value) =>
+        new TextCitationVariants::CitationsSearchResultLocationVariant(value);
+
     public abstract void Validate();
 }
