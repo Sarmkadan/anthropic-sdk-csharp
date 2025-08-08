@@ -14,5 +14,8 @@ public abstract record class Block
     public static implicit operator Block(ImageBlockParam value) =>
         new BlockVariants::ImageBlockParamVariant(value);
 
+    public static implicit operator Block(SearchResultBlockParam value) =>
+        new BlockVariants::SearchResultBlockParamVariant(value);
+
     public abstract void Validate();
 }

@@ -20,5 +20,8 @@ public abstract record class TextCitationParam
     public static implicit operator TextCitationParam(CitationWebSearchResultLocationParam value) =>
         new TextCitationParamVariants::CitationWebSearchResultLocationParamVariant(value);
 
+    public static implicit operator TextCitationParam(CitationSearchResultLocationParam value) =>
+        new TextCitationParamVariants::CitationSearchResultLocationParamVariant(value);
+
     public abstract void Validate();
 }

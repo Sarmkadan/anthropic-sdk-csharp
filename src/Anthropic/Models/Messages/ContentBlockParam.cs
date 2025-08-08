@@ -20,6 +20,9 @@ public abstract record class ContentBlockParam
     public static implicit operator ContentBlockParam(DocumentBlockParam value) =>
         new ContentBlockParamVariants::DocumentBlockParamVariant(value);
 
+    public static implicit operator ContentBlockParam(SearchResultBlockParam value) =>
+        new ContentBlockParamVariants::SearchResultBlockParamVariant(value);
+
     public static implicit operator ContentBlockParam(ThinkingBlockParam value) =>
         new ContentBlockParamVariants::ThinkingBlockParamVariant(value);
 
