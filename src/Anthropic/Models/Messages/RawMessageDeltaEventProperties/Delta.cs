@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
@@ -14,7 +13,7 @@ public sealed record class Delta : ModelBase, IFromRaw<Delta>
         get
         {
             if (!this.Properties.TryGetValue("stop_reason", out JsonElement element))
-                throw new ArgumentOutOfRangeException("stop_reason", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<StopReason?>(element, ModelBase.SerializerOptions);
         }
@@ -26,7 +25,7 @@ public sealed record class Delta : ModelBase, IFromRaw<Delta>
         get
         {
             if (!this.Properties.TryGetValue("stop_sequence", out JsonElement element))
-                throw new ArgumentOutOfRangeException("stop_sequence", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }

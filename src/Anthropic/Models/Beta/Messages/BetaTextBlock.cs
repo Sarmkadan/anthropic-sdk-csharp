@@ -21,7 +21,7 @@ public sealed record class BetaTextBlock : ModelBase, IFromRaw<BetaTextBlock>
         get
         {
             if (!this.Properties.TryGetValue("citations", out JsonElement element))
-                throw new ArgumentOutOfRangeException("citations", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<List<BetaTextCitation>?>(
                 element,

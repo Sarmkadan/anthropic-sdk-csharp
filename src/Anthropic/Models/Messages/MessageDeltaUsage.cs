@@ -19,10 +19,7 @@ public sealed record class MessageDeltaUsage : ModelBase, IFromRaw<MessageDeltaU
             if (
                 !this.Properties.TryGetValue("cache_creation_input_tokens", out JsonElement element)
             )
-                throw new ArgumentOutOfRangeException(
-                    "cache_creation_input_tokens",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<long?>(element, ModelBase.SerializerOptions);
         }
@@ -42,10 +39,7 @@ public sealed record class MessageDeltaUsage : ModelBase, IFromRaw<MessageDeltaU
         get
         {
             if (!this.Properties.TryGetValue("cache_read_input_tokens", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "cache_read_input_tokens",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<long?>(element, ModelBase.SerializerOptions);
         }
@@ -63,7 +57,7 @@ public sealed record class MessageDeltaUsage : ModelBase, IFromRaw<MessageDeltaU
         get
         {
             if (!this.Properties.TryGetValue("input_tokens", out JsonElement element))
-                throw new ArgumentOutOfRangeException("input_tokens", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<long?>(element, ModelBase.SerializerOptions);
         }
@@ -93,10 +87,7 @@ public sealed record class MessageDeltaUsage : ModelBase, IFromRaw<MessageDeltaU
         get
         {
             if (!this.Properties.TryGetValue("server_tool_use", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "server_tool_use",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<ServerToolUsage?>(
                 element,

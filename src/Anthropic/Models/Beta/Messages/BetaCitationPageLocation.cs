@@ -42,10 +42,7 @@ public sealed record class BetaCitationPageLocation : ModelBase, IFromRaw<BetaCi
         get
         {
             if (!this.Properties.TryGetValue("document_title", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "document_title",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }
@@ -72,7 +69,7 @@ public sealed record class BetaCitationPageLocation : ModelBase, IFromRaw<BetaCi
         get
         {
             if (!this.Properties.TryGetValue("file_id", out JsonElement element))
-                throw new ArgumentOutOfRangeException("file_id", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }
