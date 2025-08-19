@@ -18,10 +18,7 @@ public sealed record class Usage : ModelBase, IFromRaw<Usage>
         get
         {
             if (!this.Properties.TryGetValue("cache_creation", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "cache_creation",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<CacheCreation?>(element, ModelBase.SerializerOptions);
         }
@@ -38,10 +35,7 @@ public sealed record class Usage : ModelBase, IFromRaw<Usage>
             if (
                 !this.Properties.TryGetValue("cache_creation_input_tokens", out JsonElement element)
             )
-                throw new ArgumentOutOfRangeException(
-                    "cache_creation_input_tokens",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<long?>(element, ModelBase.SerializerOptions);
         }
@@ -61,10 +55,7 @@ public sealed record class Usage : ModelBase, IFromRaw<Usage>
         get
         {
             if (!this.Properties.TryGetValue("cache_read_input_tokens", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "cache_read_input_tokens",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<long?>(element, ModelBase.SerializerOptions);
         }
@@ -112,10 +103,7 @@ public sealed record class Usage : ModelBase, IFromRaw<Usage>
         get
         {
             if (!this.Properties.TryGetValue("server_tool_use", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "server_tool_use",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<ServerToolUsage?>(
                 element,
@@ -133,7 +121,7 @@ public sealed record class Usage : ModelBase, IFromRaw<Usage>
         get
         {
             if (!this.Properties.TryGetValue("service_tier", out JsonElement element))
-                throw new ArgumentOutOfRangeException("service_tier", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<ServiceTier?>(element, ModelBase.SerializerOptions);
         }

@@ -36,7 +36,7 @@ public sealed record class BetaMessage : ModelBase, IFromRaw<BetaMessage>
         get
         {
             if (!this.Properties.TryGetValue("container", out JsonElement element))
-                throw new ArgumentOutOfRangeException("container", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<BetaContainer?>(element, ModelBase.SerializerOptions);
         }
@@ -133,7 +133,7 @@ public sealed record class BetaMessage : ModelBase, IFromRaw<BetaMessage>
         get
         {
             if (!this.Properties.TryGetValue("stop_reason", out JsonElement element))
-                throw new ArgumentOutOfRangeException("stop_reason", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<BetaStopReason?>(
                 element,
@@ -154,7 +154,7 @@ public sealed record class BetaMessage : ModelBase, IFromRaw<BetaMessage>
         get
         {
             if (!this.Properties.TryGetValue("stop_sequence", out JsonElement element))
-                throw new ArgumentOutOfRangeException("stop_sequence", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }
