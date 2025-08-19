@@ -117,7 +117,7 @@ public sealed record class Message : ModelBase, IFromRaw<Message>
         get
         {
             if (!this.Properties.TryGetValue("stop_reason", out JsonElement element))
-                throw new ArgumentOutOfRangeException("stop_reason", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<StopReason?>(element, ModelBase.SerializerOptions);
         }
@@ -135,7 +135,7 @@ public sealed record class Message : ModelBase, IFromRaw<Message>
         get
         {
             if (!this.Properties.TryGetValue("stop_sequence", out JsonElement element))
-                throw new ArgumentOutOfRangeException("stop_sequence", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }

@@ -87,7 +87,7 @@ public sealed record class CitationsSearchResultLocation
         get
         {
             if (!this.Properties.TryGetValue("title", out JsonElement element))
-                throw new ArgumentOutOfRangeException("title", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }

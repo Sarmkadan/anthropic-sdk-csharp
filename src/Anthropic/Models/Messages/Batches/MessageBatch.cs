@@ -37,7 +37,7 @@ public sealed record class MessageBatch : ModelBase, IFromRaw<MessageBatch>
         get
         {
             if (!this.Properties.TryGetValue("archived_at", out JsonElement element))
-                throw new ArgumentOutOfRangeException("archived_at", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<DateTime?>(element, ModelBase.SerializerOptions);
         }
@@ -53,10 +53,7 @@ public sealed record class MessageBatch : ModelBase, IFromRaw<MessageBatch>
         get
         {
             if (!this.Properties.TryGetValue("cancel_initiated_at", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "cancel_initiated_at",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<DateTime?>(element, ModelBase.SerializerOptions);
         }
@@ -91,7 +88,7 @@ public sealed record class MessageBatch : ModelBase, IFromRaw<MessageBatch>
         get
         {
             if (!this.Properties.TryGetValue("ended_at", out JsonElement element))
-                throw new ArgumentOutOfRangeException("ended_at", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<DateTime?>(element, ModelBase.SerializerOptions);
         }
@@ -172,7 +169,7 @@ public sealed record class MessageBatch : ModelBase, IFromRaw<MessageBatch>
         get
         {
             if (!this.Properties.TryGetValue("results_url", out JsonElement element))
-                throw new ArgumentOutOfRangeException("results_url", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }

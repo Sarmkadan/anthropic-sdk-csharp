@@ -21,7 +21,7 @@ public sealed record class TextBlock : ModelBase, IFromRaw<TextBlock>
         get
         {
             if (!this.Properties.TryGetValue("citations", out JsonElement element))
-                throw new ArgumentOutOfRangeException("citations", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<List<TextCitation>?>(
                 element,

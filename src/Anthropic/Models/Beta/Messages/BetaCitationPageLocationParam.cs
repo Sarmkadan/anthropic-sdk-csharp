@@ -44,10 +44,7 @@ public sealed record class BetaCitationPageLocationParam
         get
         {
             if (!this.Properties.TryGetValue("document_title", out JsonElement element))
-                throw new ArgumentOutOfRangeException(
-                    "document_title",
-                    "Missing required argument"
-                );
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }

@@ -32,7 +32,7 @@ public sealed record class ModelListPageResponse : ModelBase, IFromRaw<ModelList
         get
         {
             if (!this.Properties.TryGetValue("first_id", out JsonElement element))
-                throw new ArgumentOutOfRangeException("first_id", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }
@@ -62,7 +62,7 @@ public sealed record class ModelListPageResponse : ModelBase, IFromRaw<ModelList
         get
         {
             if (!this.Properties.TryGetValue("last_id", out JsonElement element))
-                throw new ArgumentOutOfRangeException("last_id", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }

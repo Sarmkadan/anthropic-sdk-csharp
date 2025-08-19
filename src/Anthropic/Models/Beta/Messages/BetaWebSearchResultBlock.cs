@@ -30,7 +30,7 @@ public sealed record class BetaWebSearchResultBlock : ModelBase, IFromRaw<BetaWe
         get
         {
             if (!this.Properties.TryGetValue("page_age", out JsonElement element))
-                throw new ArgumentOutOfRangeException("page_age", "Missing required argument");
+                return null;
 
             return JsonSerializer.Deserialize<string?>(element, ModelBase.SerializerOptions);
         }
