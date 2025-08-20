@@ -10,17 +10,17 @@ AnthropicClient client = new();
 MessageCreateParams parameters = new()
 {
     MaxTokens = 2048,
-    Messages = [new() { Content = "Tell me a story about building the best SDK!", Role = Role.User }],
+    Messages =
+    [
+        new() { Content = "Tell me a story about building the best SDK!", Role = Role.User },
+    ],
     Model = Model.Claude4Sonnet20250514,
-    Thinking = new ThinkingConfigEnabled()
-    {
-        BudgetTokens = 1024
-    }
+    Thinking = new ThinkingConfigEnabled() { BudgetTokens = 1024 },
 };
 
 var response = await client.Messages.Create(parameters);
 
-foreach(ContentBlock block in response.Content)
+foreach (ContentBlock block in response.Content)
 {
     if (block.TryPickThinkingBlockVariant(out ThinkingBlock thinking))
     {
@@ -32,8 +32,9 @@ foreach(ContentBlock block in response.Content)
     }
 }
 
-var message = String.Join("", response.Content
-    .OfType<TextBlockVariant>()
-    .Select((textBlock) => textBlock.Value.Text));
+var message = String.Join(
+    "",
+    response.Content.OfType<TextBlockVariant>().Select((textBlock) => textBlock.Value.Text)
+);
 
 Console.WriteLine(message);

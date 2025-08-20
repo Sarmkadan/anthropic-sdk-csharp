@@ -10,19 +10,24 @@ AnthropicClient client = new();
 MessageCreateParams parameters = new()
 {
     MaxTokens = 2048,
-    Messages = [new() { Content = "Tell me a story about building the best SDK!", Role = Role.User }],
+    Messages =
+    [
+        new() { Content = "Tell me a story about building the best SDK!", Role = Role.User },
+    ],
     Model = Model.Claude4Sonnet20250514,
 };
 
-IAsyncEnumerable<RawMessageStreamEvent> responseUpdates = client.Messages.CreateStreaming(parameters);
+IAsyncEnumerable<RawMessageStreamEvent> responseUpdates = client.Messages.CreateStreaming(
+    parameters
+);
 
-await foreach(RawMessageStreamEvent rawEvent in responseUpdates)
+await foreach (RawMessageStreamEvent rawEvent in responseUpdates)
 {
-    if (rawEvent.TryPickRawContentBlockDeltaEventVariant(out var delta))
+    if (
+        rawEvent.TryPickRawContentBlockDeltaEventVariant(out var delta)
+        && delta.Delta.TryPickTextDeltaVariant(out var text)
+    )
     {
-        if (delta.Delta.TryPickTextDeltaVariant(out var text))
-        {
-            Console.Write(text.Text);
-        }
+        Console.Write(text.Text);
     }
 }
