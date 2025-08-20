@@ -21,3 +21,4 @@ var message = String.Join("", response.Content
     .Select((textBlock) => textBlock.Value.Text));
 
 Console.WriteLine(message);
+
