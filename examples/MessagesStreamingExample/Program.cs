@@ -14,11 +14,15 @@ MessageCreateParams parameters = new()
     Model = Model.Claude4Sonnet20250514,
 };
 
-var response = await client.Messages.Create(parameters);
+IAsyncEnumerable<RawMessageStreamEvent> responseUpdates = client.Messages.CreateStreaming(parameters);
 
-var message = String.Join("", response.Content
-    .OfType<TextBlockVariant>()
-    .Select((textBlock) => textBlock.Value.Text));
-
-Console.WriteLine(message);
-
+await foreach(RawMessageStreamEvent rawEvent in responseUpdates)
+{
+    if (rawEvent.TryPickRawContentBlockDeltaEventVariant(out var delta))
+    {
+        if (delta.Delta.TryPickTextDeltaVariant(out var text))
+        {
+            Console.Write(text.Text);
+        }
+    }
+}
