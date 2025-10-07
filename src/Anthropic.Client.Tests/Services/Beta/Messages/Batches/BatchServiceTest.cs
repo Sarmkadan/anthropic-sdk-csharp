@@ -26,7 +26,7 @@ public class BatchServiceTest : TestBase
                         Params = new()
                         {
                             MaxTokens = 1024,
-                            Messages = [new() { Content = "Hello, world", Role = Role.User }],
+                            Messages = [new() { Content = new("Hello, world"), Role = Role.User }],
                             Model = Messages::Model.Claude3_7SonnetLatest,
                             Container = "container",
                             ContextManagement = new()
@@ -36,10 +36,12 @@ public class BatchServiceTest : TestBase
                                     new()
                                     {
                                         STAINLESS_FIXME_ClearAtLeast = new(0),
-                                        STAINLESS_FIXME_ClearToolInputs = true,
+                                        STAINLESS_FIXME_ClearToolInputs = new(true),
                                         STAINLESS_FIXME_ExcludeTools = ["string"],
                                         STAINLESS_FIXME_Keep = new(0),
-                                        STAINLESS_FIXME_Trigger = new BetaInputTokensTrigger(1),
+                                        STAINLESS_FIXME_Trigger = new(
+                                            new BetaInputTokensTrigger(1)
+                                        ),
                                     },
                                 ],
                             },
@@ -61,44 +63,52 @@ public class BatchServiceTest : TestBase
                             ServiceTier = ServiceTier.Auto,
                             StopSequences = ["string"],
                             Stream = true,
-                            System = new List<BetaTextBlockParam>()
-                            {
-                                new()
+                            System = new(
+                                new List<BetaTextBlockParam>()
                                 {
-                                    Text = "Today's date is 2024-06-01.",
-                                    CacheControl = new() { TTL = TTL.TTL5m },
-                                    Citations =
-                                    [
-                                        new BetaCitationCharLocationParam()
-                                        {
-                                            CitedText = "cited_text",
-                                            DocumentIndex = 0,
-                                            DocumentTitle = "x",
-                                            EndCharIndex = 0,
-                                            StartCharIndex = 0,
-                                        },
-                                    ],
-                                },
-                            },
+                                    new()
+                                    {
+                                        Text = "Today's date is 2024-06-01.",
+                                        CacheControl = new() { TTL = TTL.TTL5m },
+                                        Citations =
+                                        [
+                                            new(
+                                                new BetaCitationCharLocationParam()
+                                                {
+                                                    CitedText = "cited_text",
+                                                    DocumentIndex = 0,
+                                                    DocumentTitle = "x",
+                                                    EndCharIndex = 0,
+                                                    StartCharIndex = 0,
+                                                }
+                                            ),
+                                        ],
+                                    },
+                                }
+                            ),
                             Temperature = 1,
-                            Thinking = new BetaThinkingConfigEnabled(1024),
-                            ToolChoice = new BetaToolChoiceAuto() { DisableParallelToolUse = true },
+                            Thinking = new(new BetaThinkingConfigEnabled(1024)),
+                            ToolChoice = new(
+                                new BetaToolChoiceAuto() { DisableParallelToolUse = true }
+                            ),
                             Tools =
                             [
-                                new BetaTool()
-                                {
-                                    InputSchema = new()
+                                new(
+                                    new BetaTool()
                                     {
-                                        Properties1 = JsonSerializer.Deserialize<JsonElement>(
-                                            "{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"Unit for the output - one of (celsius, fahrenheit)\",\"type\":\"string\"}}"
-                                        ),
-                                        Required = ["location"],
-                                    },
-                                    Name = "name",
-                                    CacheControl = new() { TTL = TTL.TTL5m },
-                                    Description = "Get the current weather in a given location",
-                                    Type = Type.Custom,
-                                },
+                                        InputSchema = new()
+                                        {
+                                            Properties1 = JsonSerializer.Deserialize<JsonElement>(
+                                                "{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"Unit for the output - one of (celsius, fahrenheit)\",\"type\":\"string\"}}"
+                                            ),
+                                            Required = ["location"],
+                                        },
+                                        Name = "name",
+                                        CacheControl = new() { TTL = TTL.TTL5m },
+                                        Description = "Get the current weather in a given location",
+                                        Type = Type.Custom,
+                                    }
+                                ),
                             ],
                             TopK = 5,
                             TopP = 0.7,
