@@ -7,7 +7,7 @@ public class ModelServiceTest : TestBase
     [Fact]
     public async Task Retrieve_Works()
     {
-        var betaModelInfo = await this.client.Beta.Models.Retrieve(new() { ModelID = "model_id" });
+        var betaModelInfo = await this.client.Beta.Models.Retrieve("model_id");
         betaModelInfo.Validate();
     }
 

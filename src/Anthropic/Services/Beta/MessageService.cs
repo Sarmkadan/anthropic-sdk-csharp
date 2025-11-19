@@ -79,6 +79,7 @@ public sealed class MessageService : global::Anthropic.Services.Beta.IMessageSer
             parameters.QueryProperties,
             bodyProperties
         );
+
         HttpRequest<MessageCreateParams> request = new()
         {
             Method = HttpMethod.Post,

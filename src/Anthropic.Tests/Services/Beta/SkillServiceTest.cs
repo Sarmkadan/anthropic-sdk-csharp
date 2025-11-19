@@ -14,7 +14,7 @@ public class SkillServiceTest : TestBase
     [Fact]
     public async Task Retrieve_Works()
     {
-        var skill = await this.client.Beta.Skills.Retrieve(new() { SkillID = "skill_id" });
+        var skill = await this.client.Beta.Skills.Retrieve("skill_id");
         skill.Validate();
     }
 
@@ -28,7 +28,7 @@ public class SkillServiceTest : TestBase
     [Fact]
     public async Task Delete_Works()
     {
-        var skill = await this.client.Beta.Skills.Delete(new() { SkillID = "skill_id" });
+        var skill = await this.client.Beta.Skills.Delete("skill_id");
         skill.Validate();
     }
 }

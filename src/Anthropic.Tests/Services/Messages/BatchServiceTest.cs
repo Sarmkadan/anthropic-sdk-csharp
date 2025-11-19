@@ -92,9 +92,7 @@ public class BatchServiceTest : TestBase
     [Fact]
     public async Task Retrieve_Works()
     {
-        var messageBatch = await this.client.Messages.Batches.Retrieve(
-            new() { MessageBatchID = "message_batch_id" }
-        );
+        var messageBatch = await this.client.Messages.Batches.Retrieve("message_batch_id");
         messageBatch.Validate();
     }
 
@@ -108,27 +106,21 @@ public class BatchServiceTest : TestBase
     [Fact]
     public async Task Delete_Works()
     {
-        var deletedMessageBatch = await this.client.Messages.Batches.Delete(
-            new() { MessageBatchID = "message_batch_id" }
-        );
+        var deletedMessageBatch = await this.client.Messages.Batches.Delete("message_batch_id");
         deletedMessageBatch.Validate();
     }
 
     [Fact]
     public async Task Cancel_Works()
     {
-        var messageBatch = await this.client.Messages.Batches.Cancel(
-            new() { MessageBatchID = "message_batch_id" }
-        );
+        var messageBatch = await this.client.Messages.Batches.Cancel("message_batch_id");
         messageBatch.Validate();
     }
 
     [Fact(Skip = "Prism doesn't support application/x-jsonl responses")]
     public async Task ResultsStreaming_Works()
     {
-        var stream = this.client.Messages.Batches.ResultsStreaming(
-            new() { MessageBatchID = "message_batch_id" }
-        );
+        var stream = this.client.Messages.Batches.ResultsStreaming("message_batch_id");
 
         await foreach (var messageBatchIndividualResponse in stream)
         {
