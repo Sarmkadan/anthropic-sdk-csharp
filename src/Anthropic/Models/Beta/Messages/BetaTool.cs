@@ -76,6 +76,32 @@ public sealed record class BetaTool : ModelBase, IFromRaw<BetaTool>
         }
     }
 
+    public List<ApiEnum<string, AllowedCaller2>>? AllowedCallers
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("allowed_callers", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCaller2>>?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["allowed_callers"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
     /// <summary>
     /// Create a cache control breakpoint at this content block.
     /// </summary>
@@ -94,6 +120,33 @@ public sealed record class BetaTool : ModelBase, IFromRaw<BetaTool>
         init
         {
             this._rawData["cache_control"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    /// <summary>
+    /// If true, tool will not be included in initial system prompt. Only loaded when
+    /// returned via tool_reference from tool search.
+    /// </summary>
+    public bool? DeferLoading
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("defer_loading", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<bool?>(element, ModelBase.SerializerOptions);
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["defer_loading"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -125,6 +178,32 @@ public sealed record class BetaTool : ModelBase, IFromRaw<BetaTool>
             }
 
             this._rawData["description"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    public List<Dictionary<string, JsonElement>>? InputExamples
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("input_examples", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["input_examples"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -179,8 +258,14 @@ public sealed record class BetaTool : ModelBase, IFromRaw<BetaTool>
     {
         this.InputSchema.Validate();
         _ = this.Name;
+        foreach (var item in this.AllowedCallers ?? [])
+        {
+            item.Validate();
+        }
         this.CacheControl?.Validate();
+        _ = this.DeferLoading;
         _ = this.Description;
+        _ = this.InputExamples;
         _ = this.Strict;
         this.Type?.Validate();
     }
@@ -313,6 +398,50 @@ public sealed record class InputSchema : ModelBase, IFromRaw<InputSchema>
     public static InputSchema FromRawUnchecked(IReadOnlyDictionary<string, JsonElement> rawData)
     {
         return new(FrozenDictionary.ToFrozenDictionary(rawData));
+    }
+}
+
+[JsonConverter(typeof(AllowedCaller2Converter))]
+public enum AllowedCaller2
+{
+    Direct,
+    CodeExecution20250825,
+}
+
+sealed class AllowedCaller2Converter : JsonConverter<AllowedCaller2>
+{
+    public override AllowedCaller2 Read(
+        ref Utf8JsonReader reader,
+        System::Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return JsonSerializer.Deserialize<string>(ref reader, options) switch
+        {
+            "direct" => AllowedCaller2.Direct,
+            "code_execution_20250825" => AllowedCaller2.CodeExecution20250825,
+            _ => (AllowedCaller2)(-1),
+        };
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        AllowedCaller2 value,
+        JsonSerializerOptions options
+    )
+    {
+        JsonSerializer.Serialize(
+            writer,
+            value switch
+            {
+                AllowedCaller2.Direct => "direct",
+                AllowedCaller2.CodeExecution20250825 => "code_execution_20250825",
+                _ => throw new AnthropicInvalidDataException(
+                    string.Format("Invalid value '{0}' in {1}", value, nameof(value))
+                ),
+            },
+            options
+        );
     }
 }
 

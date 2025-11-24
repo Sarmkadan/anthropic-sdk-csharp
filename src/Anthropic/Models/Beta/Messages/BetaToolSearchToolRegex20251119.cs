@@ -9,65 +9,11 @@ using System = System;
 
 namespace Anthropic.Models.Beta.Messages;
 
-[JsonConverter(typeof(ModelConverter<BetaToolComputerUse20241022>))]
-public sealed record class BetaToolComputerUse20241022
+[JsonConverter(typeof(ModelConverter<BetaToolSearchToolRegex20251119>))]
+public sealed record class BetaToolSearchToolRegex20251119
     : ModelBase,
-        IFromRaw<BetaToolComputerUse20241022>
+        IFromRaw<BetaToolSearchToolRegex20251119>
 {
-    /// <summary>
-    /// The height of the display in pixels.
-    /// </summary>
-    public required long DisplayHeightPx
-    {
-        get
-        {
-            if (!this._rawData.TryGetValue("display_height_px", out JsonElement element))
-                throw new AnthropicInvalidDataException(
-                    "'display_height_px' cannot be null",
-                    new System::ArgumentOutOfRangeException(
-                        "display_height_px",
-                        "Missing required argument"
-                    )
-                );
-
-            return JsonSerializer.Deserialize<long>(element, ModelBase.SerializerOptions);
-        }
-        init
-        {
-            this._rawData["display_height_px"] = JsonSerializer.SerializeToElement(
-                value,
-                ModelBase.SerializerOptions
-            );
-        }
-    }
-
-    /// <summary>
-    /// The width of the display in pixels.
-    /// </summary>
-    public required long DisplayWidthPx
-    {
-        get
-        {
-            if (!this._rawData.TryGetValue("display_width_px", out JsonElement element))
-                throw new AnthropicInvalidDataException(
-                    "'display_width_px' cannot be null",
-                    new System::ArgumentOutOfRangeException(
-                        "display_width_px",
-                        "Missing required argument"
-                    )
-                );
-
-            return JsonSerializer.Deserialize<long>(element, ModelBase.SerializerOptions);
-        }
-        init
-        {
-            this._rawData["display_width_px"] = JsonSerializer.SerializeToElement(
-                value,
-                ModelBase.SerializerOptions
-            );
-        }
-    }
-
     /// <summary>
     /// Name of the tool.
     ///
@@ -94,7 +40,7 @@ public sealed record class BetaToolComputerUse20241022
         }
     }
 
-    public JsonElement Type
+    public required ApiEnum<string, BetaToolSearchToolRegex20251119Type> Type
     {
         get
         {
@@ -104,7 +50,10 @@ public sealed record class BetaToolComputerUse20241022
                     new System::ArgumentOutOfRangeException("type", "Missing required argument")
                 );
 
-            return JsonSerializer.Deserialize<JsonElement>(element, ModelBase.SerializerOptions);
+            return JsonSerializer.Deserialize<ApiEnum<string, BetaToolSearchToolRegex20251119Type>>(
+                element,
+                ModelBase.SerializerOptions
+            );
         }
         init
         {
@@ -115,14 +64,14 @@ public sealed record class BetaToolComputerUse20241022
         }
     }
 
-    public List<ApiEnum<string, AllowedCaller5>>? AllowedCallers
+    public List<ApiEnum<string, AllowedCaller9>>? AllowedCallers
     {
         get
         {
             if (!this._rawData.TryGetValue("allowed_callers", out JsonElement element))
                 return null;
 
-            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCaller5>>?>(
+            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCaller9>>?>(
                 element,
                 ModelBase.SerializerOptions
             );
@@ -192,53 +141,6 @@ public sealed record class BetaToolComputerUse20241022
         }
     }
 
-    /// <summary>
-    /// The X11 display number (e.g. 0, 1) for the display.
-    /// </summary>
-    public long? DisplayNumber
-    {
-        get
-        {
-            if (!this._rawData.TryGetValue("display_number", out JsonElement element))
-                return null;
-
-            return JsonSerializer.Deserialize<long?>(element, ModelBase.SerializerOptions);
-        }
-        init
-        {
-            this._rawData["display_number"] = JsonSerializer.SerializeToElement(
-                value,
-                ModelBase.SerializerOptions
-            );
-        }
-    }
-
-    public List<Dictionary<string, JsonElement>>? InputExamples
-    {
-        get
-        {
-            if (!this._rawData.TryGetValue("input_examples", out JsonElement element))
-                return null;
-
-            return JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>?>(
-                element,
-                ModelBase.SerializerOptions
-            );
-        }
-        init
-        {
-            if (value == null)
-            {
-                return;
-            }
-
-            this._rawData["input_examples"] = JsonSerializer.SerializeToElement(
-                value,
-                ModelBase.SerializerOptions
-            );
-        }
-    }
-
     public bool? Strict
     {
         get
@@ -264,77 +166,73 @@ public sealed record class BetaToolComputerUse20241022
 
     public override void Validate()
     {
-        _ = this.DisplayHeightPx;
-        _ = this.DisplayWidthPx;
         if (
             !JsonElement.DeepEquals(
                 this.Name,
-                JsonSerializer.Deserialize<JsonElement>("\"computer\"")
+                JsonSerializer.Deserialize<JsonElement>("\"tool_search_tool_regex\"")
             )
         )
         {
             throw new AnthropicInvalidDataException("Invalid value given for constant");
         }
-        if (
-            !JsonElement.DeepEquals(
-                this.Type,
-                JsonSerializer.Deserialize<JsonElement>("\"computer_20241022\"")
-            )
-        )
-        {
-            throw new AnthropicInvalidDataException("Invalid value given for constant");
-        }
+        this.Type.Validate();
         foreach (var item in this.AllowedCallers ?? [])
         {
             item.Validate();
         }
         this.CacheControl?.Validate();
         _ = this.DeferLoading;
-        _ = this.DisplayNumber;
-        _ = this.InputExamples;
         _ = this.Strict;
     }
 
-    public BetaToolComputerUse20241022()
+    public BetaToolSearchToolRegex20251119()
     {
-        this.Name = JsonSerializer.Deserialize<JsonElement>("\"computer\"");
-        this.Type = JsonSerializer.Deserialize<JsonElement>("\"computer_20241022\"");
+        this.Name = JsonSerializer.Deserialize<JsonElement>("\"tool_search_tool_regex\"");
     }
 
-    public BetaToolComputerUse20241022(IReadOnlyDictionary<string, JsonElement> rawData)
+    public BetaToolSearchToolRegex20251119(IReadOnlyDictionary<string, JsonElement> rawData)
     {
         this._rawData = [.. rawData];
 
-        this.Name = JsonSerializer.Deserialize<JsonElement>("\"computer\"");
-        this.Type = JsonSerializer.Deserialize<JsonElement>("\"computer_20241022\"");
+        this.Name = JsonSerializer.Deserialize<JsonElement>("\"tool_search_tool_regex\"");
     }
 
 #pragma warning disable CS8618
     [SetsRequiredMembers]
-    BetaToolComputerUse20241022(FrozenDictionary<string, JsonElement> rawData)
+    BetaToolSearchToolRegex20251119(FrozenDictionary<string, JsonElement> rawData)
     {
         this._rawData = [.. rawData];
     }
 #pragma warning restore CS8618
 
-    public static BetaToolComputerUse20241022 FromRawUnchecked(
+    public static BetaToolSearchToolRegex20251119 FromRawUnchecked(
         IReadOnlyDictionary<string, JsonElement> rawData
     )
     {
         return new(FrozenDictionary.ToFrozenDictionary(rawData));
     }
+
+    [SetsRequiredMembers]
+    public BetaToolSearchToolRegex20251119(
+        ApiEnum<string, BetaToolSearchToolRegex20251119Type> type
+    )
+        : this()
+    {
+        this.Type = type;
+    }
 }
 
-[JsonConverter(typeof(AllowedCaller5Converter))]
-public enum AllowedCaller5
+[JsonConverter(typeof(BetaToolSearchToolRegex20251119TypeConverter))]
+public enum BetaToolSearchToolRegex20251119Type
 {
-    Direct,
-    CodeExecution20250825,
+    ToolSearchToolRegex20251119,
+    ToolSearchToolRegex,
 }
 
-sealed class AllowedCaller5Converter : JsonConverter<AllowedCaller5>
+sealed class BetaToolSearchToolRegex20251119TypeConverter
+    : JsonConverter<BetaToolSearchToolRegex20251119Type>
 {
-    public override AllowedCaller5 Read(
+    public override BetaToolSearchToolRegex20251119Type Read(
         ref Utf8JsonReader reader,
         System::Type typeToConvert,
         JsonSerializerOptions options
@@ -342,15 +240,16 @@ sealed class AllowedCaller5Converter : JsonConverter<AllowedCaller5>
     {
         return JsonSerializer.Deserialize<string>(ref reader, options) switch
         {
-            "direct" => AllowedCaller5.Direct,
-            "code_execution_20250825" => AllowedCaller5.CodeExecution20250825,
-            _ => (AllowedCaller5)(-1),
+            "tool_search_tool_regex_20251119" =>
+                BetaToolSearchToolRegex20251119Type.ToolSearchToolRegex20251119,
+            "tool_search_tool_regex" => BetaToolSearchToolRegex20251119Type.ToolSearchToolRegex,
+            _ => (BetaToolSearchToolRegex20251119Type)(-1),
         };
     }
 
     public override void Write(
         Utf8JsonWriter writer,
-        AllowedCaller5 value,
+        BetaToolSearchToolRegex20251119Type value,
         JsonSerializerOptions options
     )
     {
@@ -358,8 +257,53 @@ sealed class AllowedCaller5Converter : JsonConverter<AllowedCaller5>
             writer,
             value switch
             {
-                AllowedCaller5.Direct => "direct",
-                AllowedCaller5.CodeExecution20250825 => "code_execution_20250825",
+                BetaToolSearchToolRegex20251119Type.ToolSearchToolRegex20251119 =>
+                    "tool_search_tool_regex_20251119",
+                BetaToolSearchToolRegex20251119Type.ToolSearchToolRegex => "tool_search_tool_regex",
+                _ => throw new AnthropicInvalidDataException(
+                    string.Format("Invalid value '{0}' in {1}", value, nameof(value))
+                ),
+            },
+            options
+        );
+    }
+}
+
+[JsonConverter(typeof(AllowedCaller9Converter))]
+public enum AllowedCaller9
+{
+    Direct,
+    CodeExecution20250825,
+}
+
+sealed class AllowedCaller9Converter : JsonConverter<AllowedCaller9>
+{
+    public override AllowedCaller9 Read(
+        ref Utf8JsonReader reader,
+        System::Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return JsonSerializer.Deserialize<string>(ref reader, options) switch
+        {
+            "direct" => AllowedCaller9.Direct,
+            "code_execution_20250825" => AllowedCaller9.CodeExecution20250825,
+            _ => (AllowedCaller9)(-1),
+        };
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        AllowedCaller9 value,
+        JsonSerializerOptions options
+    )
+    {
+        JsonSerializer.Serialize(
+            writer,
+            value switch
+            {
+                AllowedCaller9.Direct => "direct",
+                AllowedCaller9.CodeExecution20250825 => "code_execution_20250825",
                 _ => throw new AnthropicInvalidDataException(
                     string.Format("Invalid value '{0}' in {1}", value, nameof(value))
                 ),

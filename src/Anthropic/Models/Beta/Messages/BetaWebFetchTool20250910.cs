@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -6,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Anthropic.Core;
 using Anthropic.Exceptions;
+using System = System;
 
 namespace Anthropic.Models.Beta.Messages;
 
@@ -24,7 +24,7 @@ public sealed record class BetaWebFetchTool20250910 : ModelBase, IFromRaw<BetaWe
             if (!this._rawData.TryGetValue("name", out JsonElement element))
                 throw new AnthropicInvalidDataException(
                     "'name' cannot be null",
-                    new ArgumentOutOfRangeException("name", "Missing required argument")
+                    new System::ArgumentOutOfRangeException("name", "Missing required argument")
                 );
 
             return JsonSerializer.Deserialize<JsonElement>(element, ModelBase.SerializerOptions);
@@ -45,7 +45,7 @@ public sealed record class BetaWebFetchTool20250910 : ModelBase, IFromRaw<BetaWe
             if (!this._rawData.TryGetValue("type", out JsonElement element))
                 throw new AnthropicInvalidDataException(
                     "'type' cannot be null",
-                    new ArgumentOutOfRangeException("type", "Missing required argument")
+                    new System::ArgumentOutOfRangeException("type", "Missing required argument")
                 );
 
             return JsonSerializer.Deserialize<JsonElement>(element, ModelBase.SerializerOptions);
@@ -53,6 +53,32 @@ public sealed record class BetaWebFetchTool20250910 : ModelBase, IFromRaw<BetaWe
         init
         {
             this._rawData["type"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    public List<ApiEnum<string, AllowedCaller14>>? AllowedCallers
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("allowed_callers", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCaller14>>?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["allowed_callers"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -150,6 +176,33 @@ public sealed record class BetaWebFetchTool20250910 : ModelBase, IFromRaw<BetaWe
     }
 
     /// <summary>
+    /// If true, tool will not be included in initial system prompt. Only loaded when
+    /// returned via tool_reference from tool search.
+    /// </summary>
+    public bool? DeferLoading
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("defer_loading", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<bool?>(element, ModelBase.SerializerOptions);
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["defer_loading"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    /// <summary>
     /// Maximum number of tokens used by including web page text content in the context.
     /// The limit is approximate and does not apply to binary content such as PDFs.
     /// </summary>
@@ -235,10 +288,15 @@ public sealed record class BetaWebFetchTool20250910 : ModelBase, IFromRaw<BetaWe
         {
             throw new AnthropicInvalidDataException("Invalid value given for constant");
         }
+        foreach (var item in this.AllowedCallers ?? [])
+        {
+            item.Validate();
+        }
         _ = this.AllowedDomains;
         _ = this.BlockedDomains;
         this.CacheControl?.Validate();
         this.Citations?.Validate();
+        _ = this.DeferLoading;
         _ = this.MaxContentTokens;
         _ = this.MaxUses;
         _ = this.Strict;
@@ -271,5 +329,49 @@ public sealed record class BetaWebFetchTool20250910 : ModelBase, IFromRaw<BetaWe
     )
     {
         return new(FrozenDictionary.ToFrozenDictionary(rawData));
+    }
+}
+
+[JsonConverter(typeof(AllowedCaller14Converter))]
+public enum AllowedCaller14
+{
+    Direct,
+    CodeExecution20250825,
+}
+
+sealed class AllowedCaller14Converter : JsonConverter<AllowedCaller14>
+{
+    public override AllowedCaller14 Read(
+        ref Utf8JsonReader reader,
+        System::Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return JsonSerializer.Deserialize<string>(ref reader, options) switch
+        {
+            "direct" => AllowedCaller14.Direct,
+            "code_execution_20250825" => AllowedCaller14.CodeExecution20250825,
+            _ => (AllowedCaller14)(-1),
+        };
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        AllowedCaller14 value,
+        JsonSerializerOptions options
+    )
+    {
+        JsonSerializer.Serialize(
+            writer,
+            value switch
+            {
+                AllowedCaller14.Direct => "direct",
+                AllowedCaller14.CodeExecution20250825 => "code_execution_20250825",
+                _ => throw new AnthropicInvalidDataException(
+                    string.Format("Invalid value '{0}' in {1}", value, nameof(value))
+                ),
+            },
+            options
+        );
     }
 }

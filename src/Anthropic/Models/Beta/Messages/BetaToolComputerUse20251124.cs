@@ -9,10 +9,10 @@ using System = System;
 
 namespace Anthropic.Models.Beta.Messages;
 
-[JsonConverter(typeof(ModelConverter<BetaToolComputerUse20241022>))]
-public sealed record class BetaToolComputerUse20241022
+[JsonConverter(typeof(ModelConverter<BetaToolComputerUse20251124>))]
+public sealed record class BetaToolComputerUse20251124
     : ModelBase,
-        IFromRaw<BetaToolComputerUse20241022>
+        IFromRaw<BetaToolComputerUse20251124>
 {
     /// <summary>
     /// The height of the display in pixels.
@@ -115,14 +115,14 @@ public sealed record class BetaToolComputerUse20241022
         }
     }
 
-    public List<ApiEnum<string, AllowedCaller5>>? AllowedCallers
+    public List<ApiEnum<string, AllowedCaller7>>? AllowedCallers
     {
         get
         {
             if (!this._rawData.TryGetValue("allowed_callers", out JsonElement element))
                 return null;
 
-            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCaller5>>?>(
+            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCaller7>>?>(
                 element,
                 ModelBase.SerializerOptions
             );
@@ -213,6 +213,32 @@ public sealed record class BetaToolComputerUse20241022
         }
     }
 
+    /// <summary>
+    /// Whether to enable an action to take a zoomed-in screenshot of the screen.
+    /// </summary>
+    public bool? EnableZoom
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("enable_zoom", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<bool?>(element, ModelBase.SerializerOptions);
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["enable_zoom"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
     public List<Dictionary<string, JsonElement>>? InputExamples
     {
         get
@@ -278,7 +304,7 @@ public sealed record class BetaToolComputerUse20241022
         if (
             !JsonElement.DeepEquals(
                 this.Type,
-                JsonSerializer.Deserialize<JsonElement>("\"computer_20241022\"")
+                JsonSerializer.Deserialize<JsonElement>("\"computer_20251124\"")
             )
         )
         {
@@ -291,33 +317,34 @@ public sealed record class BetaToolComputerUse20241022
         this.CacheControl?.Validate();
         _ = this.DeferLoading;
         _ = this.DisplayNumber;
+        _ = this.EnableZoom;
         _ = this.InputExamples;
         _ = this.Strict;
     }
 
-    public BetaToolComputerUse20241022()
+    public BetaToolComputerUse20251124()
     {
         this.Name = JsonSerializer.Deserialize<JsonElement>("\"computer\"");
-        this.Type = JsonSerializer.Deserialize<JsonElement>("\"computer_20241022\"");
+        this.Type = JsonSerializer.Deserialize<JsonElement>("\"computer_20251124\"");
     }
 
-    public BetaToolComputerUse20241022(IReadOnlyDictionary<string, JsonElement> rawData)
+    public BetaToolComputerUse20251124(IReadOnlyDictionary<string, JsonElement> rawData)
     {
         this._rawData = [.. rawData];
 
         this.Name = JsonSerializer.Deserialize<JsonElement>("\"computer\"");
-        this.Type = JsonSerializer.Deserialize<JsonElement>("\"computer_20241022\"");
+        this.Type = JsonSerializer.Deserialize<JsonElement>("\"computer_20251124\"");
     }
 
 #pragma warning disable CS8618
     [SetsRequiredMembers]
-    BetaToolComputerUse20241022(FrozenDictionary<string, JsonElement> rawData)
+    BetaToolComputerUse20251124(FrozenDictionary<string, JsonElement> rawData)
     {
         this._rawData = [.. rawData];
     }
 #pragma warning restore CS8618
 
-    public static BetaToolComputerUse20241022 FromRawUnchecked(
+    public static BetaToolComputerUse20251124 FromRawUnchecked(
         IReadOnlyDictionary<string, JsonElement> rawData
     )
     {
@@ -325,16 +352,16 @@ public sealed record class BetaToolComputerUse20241022
     }
 }
 
-[JsonConverter(typeof(AllowedCaller5Converter))]
-public enum AllowedCaller5
+[JsonConverter(typeof(AllowedCaller7Converter))]
+public enum AllowedCaller7
 {
     Direct,
     CodeExecution20250825,
 }
 
-sealed class AllowedCaller5Converter : JsonConverter<AllowedCaller5>
+sealed class AllowedCaller7Converter : JsonConverter<AllowedCaller7>
 {
-    public override AllowedCaller5 Read(
+    public override AllowedCaller7 Read(
         ref Utf8JsonReader reader,
         System::Type typeToConvert,
         JsonSerializerOptions options
@@ -342,15 +369,15 @@ sealed class AllowedCaller5Converter : JsonConverter<AllowedCaller5>
     {
         return JsonSerializer.Deserialize<string>(ref reader, options) switch
         {
-            "direct" => AllowedCaller5.Direct,
-            "code_execution_20250825" => AllowedCaller5.CodeExecution20250825,
-            _ => (AllowedCaller5)(-1),
+            "direct" => AllowedCaller7.Direct,
+            "code_execution_20250825" => AllowedCaller7.CodeExecution20250825,
+            _ => (AllowedCaller7)(-1),
         };
     }
 
     public override void Write(
         Utf8JsonWriter writer,
-        AllowedCaller5 value,
+        AllowedCaller7 value,
         JsonSerializerOptions options
     )
     {
@@ -358,8 +385,8 @@ sealed class AllowedCaller5Converter : JsonConverter<AllowedCaller5>
             writer,
             value switch
             {
-                AllowedCaller5.Direct => "direct",
-                AllowedCaller5.CodeExecution20250825 => "code_execution_20250825",
+                AllowedCaller7.Direct => "direct",
+                AllowedCaller7.CodeExecution20250825 => "code_execution_20250825",
                 _ => throw new AnthropicInvalidDataException(
                     string.Format("Invalid value '{0}' in {1}", value, nameof(value))
                 ),

@@ -322,6 +322,9 @@ sealed class BetaToolResultBlockParamContentConverter
     }
 }
 
+/// <summary>
+/// Tool reference block that can be included in tool_result content.
+/// </summary>
 [JsonConverter(typeof(BlockConverter))]
 public record class Block
 {
@@ -342,7 +345,8 @@ public record class Block
                 betaTextBlockParam: (x) => x.Type,
                 betaImageBlockParam: (x) => x.Type,
                 betaSearchResultBlockParam: (x) => x.Type,
-                betaRequestDocument: (x) => x.Type
+                betaRequestDocument: (x) => x.Type,
+                betaToolReferenceBlockParam: (x) => x.Type
             );
         }
     }
@@ -355,7 +359,8 @@ public record class Block
                 betaTextBlockParam: (x) => x.CacheControl,
                 betaImageBlockParam: (x) => x.CacheControl,
                 betaSearchResultBlockParam: (x) => x.CacheControl,
-                betaRequestDocument: (x) => x.CacheControl
+                betaRequestDocument: (x) => x.CacheControl,
+                betaToolReferenceBlockParam: (x) => x.CacheControl
             );
         }
     }
@@ -368,7 +373,8 @@ public record class Block
                 betaTextBlockParam: (_) => null,
                 betaImageBlockParam: (_) => null,
                 betaSearchResultBlockParam: (x) => x.Title,
-                betaRequestDocument: (x) => x.Title
+                betaRequestDocument: (x) => x.Title,
+                betaToolReferenceBlockParam: (_) => null
             );
         }
     }
@@ -392,6 +398,12 @@ public record class Block
     }
 
     public Block(BetaRequestDocumentBlock value, JsonElement? json = null)
+    {
+        this.Value = value;
+        this._json = json;
+    }
+
+    public Block(BetaToolReferenceBlockParam value, JsonElement? json = null)
     {
         this.Value = value;
         this._json = json;
@@ -428,11 +440,20 @@ public record class Block
         return value != null;
     }
 
+    public bool TryPickBetaToolReferenceBlockParam(
+        [NotNullWhen(true)] out BetaToolReferenceBlockParam? value
+    )
+    {
+        value = this.Value as BetaToolReferenceBlockParam;
+        return value != null;
+    }
+
     public void Switch(
         System::Action<BetaTextBlockParam> betaTextBlockParam,
         System::Action<BetaImageBlockParam> betaImageBlockParam,
         System::Action<BetaSearchResultBlockParam> betaSearchResultBlockParam,
-        System::Action<BetaRequestDocumentBlock> betaRequestDocument
+        System::Action<BetaRequestDocumentBlock> betaRequestDocument,
+        System::Action<BetaToolReferenceBlockParam> betaToolReferenceBlockParam
     )
     {
         switch (this.Value)
@@ -449,6 +470,9 @@ public record class Block
             case BetaRequestDocumentBlock value:
                 betaRequestDocument(value);
                 break;
+            case BetaToolReferenceBlockParam value:
+                betaToolReferenceBlockParam(value);
+                break;
             default:
                 throw new AnthropicInvalidDataException("Data did not match any variant of Block");
         }
@@ -458,7 +482,8 @@ public record class Block
         System::Func<BetaTextBlockParam, T> betaTextBlockParam,
         System::Func<BetaImageBlockParam, T> betaImageBlockParam,
         System::Func<BetaSearchResultBlockParam, T> betaSearchResultBlockParam,
-        System::Func<BetaRequestDocumentBlock, T> betaRequestDocument
+        System::Func<BetaRequestDocumentBlock, T> betaRequestDocument,
+        System::Func<BetaToolReferenceBlockParam, T> betaToolReferenceBlockParam
     )
     {
         return this.Value switch
@@ -467,6 +492,7 @@ public record class Block
             BetaImageBlockParam value => betaImageBlockParam(value),
             BetaSearchResultBlockParam value => betaSearchResultBlockParam(value),
             BetaRequestDocumentBlock value => betaRequestDocument(value),
+            BetaToolReferenceBlockParam value => betaToolReferenceBlockParam(value),
             _ => throw new AnthropicInvalidDataException("Data did not match any variant of Block"),
         };
     }
@@ -478,6 +504,8 @@ public record class Block
     public static implicit operator Block(BetaSearchResultBlockParam value) => new(value);
 
     public static implicit operator Block(BetaRequestDocumentBlock value) => new(value);
+
+    public static implicit operator Block(BetaToolReferenceBlockParam value) => new(value);
 
     public void Validate()
     {
@@ -580,6 +608,28 @@ sealed class BlockConverter : JsonConverter<Block>
                 try
                 {
                     var deserialized = JsonSerializer.Deserialize<BetaRequestDocumentBlock>(
+                        json,
+                        options
+                    );
+                    if (deserialized != null)
+                    {
+                        deserialized.Validate();
+                        return new(deserialized, json);
+                    }
+                }
+                catch (System::Exception e)
+                    when (e is JsonException || e is AnthropicInvalidDataException)
+                {
+                    // ignore
+                }
+
+                return new(json);
+            }
+            case "tool_reference":
+            {
+                try
+                {
+                    var deserialized = JsonSerializer.Deserialize<BetaToolReferenceBlockParam>(
                         json,
                         options
                     );

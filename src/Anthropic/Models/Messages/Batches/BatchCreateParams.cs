@@ -163,8 +163,8 @@ public sealed record class Request : ModelBase, IFromRaw<Request>
     /// <summary>
     /// Messages API creation parameters for the individual request.
     ///
-    /// <para>See the [Messages API reference](/en/api/messages) for full documentation
-    /// on available parameters.</para>
+    /// <para>See the [Messages API reference](https://docs.claude.com/en/api/messages)
+    /// for full documentation on available parameters.</para>
     /// </summary>
     public required Params Params
     {
@@ -221,8 +221,8 @@ public sealed record class Request : ModelBase, IFromRaw<Request>
 /// <summary>
 /// Messages API creation parameters for the individual request.
 ///
-/// <para>See the [Messages API reference](/en/api/messages) for full documentation
-/// on available parameters.</para>
+/// <para>See the [Messages API reference](https://docs.claude.com/en/api/messages)
+/// for full documentation on available parameters.</para>
 /// </summary>
 [JsonConverter(typeof(ModelConverter<Params>))]
 public sealed record class Params : ModelBase, IFromRaw<Params>

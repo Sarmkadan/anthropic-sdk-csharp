@@ -136,6 +136,35 @@ public sealed record class BetaServerToolUseBlockParam
         }
     }
 
+    /// <summary>
+    /// Tool invocation directly from the model.
+    /// </summary>
+    public BetaServerToolUseBlockParamCaller? Caller
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("caller", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<BetaServerToolUseBlockParamCaller?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["caller"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
     public override void Validate()
     {
         _ = this.ID;
@@ -151,6 +180,7 @@ public sealed record class BetaServerToolUseBlockParam
             throw new AnthropicInvalidDataException("Invalid value given for constant");
         }
         this.CacheControl?.Validate();
+        this.Caller?.Validate();
     }
 
     public BetaServerToolUseBlockParam()
@@ -189,6 +219,8 @@ public enum BetaServerToolUseBlockParamName
     CodeExecution,
     BashCodeExecution,
     TextEditorCodeExecution,
+    ToolSearchToolRegex,
+    ToolSearchToolBm25,
 }
 
 sealed class BetaServerToolUseBlockParamNameConverter
@@ -207,6 +239,8 @@ sealed class BetaServerToolUseBlockParamNameConverter
             "code_execution" => BetaServerToolUseBlockParamName.CodeExecution,
             "bash_code_execution" => BetaServerToolUseBlockParamName.BashCodeExecution,
             "text_editor_code_execution" => BetaServerToolUseBlockParamName.TextEditorCodeExecution,
+            "tool_search_tool_regex" => BetaServerToolUseBlockParamName.ToolSearchToolRegex,
+            "tool_search_tool_bm25" => BetaServerToolUseBlockParamName.ToolSearchToolBm25,
             _ => (BetaServerToolUseBlockParamName)(-1),
         };
     }
@@ -227,11 +261,194 @@ sealed class BetaServerToolUseBlockParamNameConverter
                 BetaServerToolUseBlockParamName.BashCodeExecution => "bash_code_execution",
                 BetaServerToolUseBlockParamName.TextEditorCodeExecution =>
                     "text_editor_code_execution",
+                BetaServerToolUseBlockParamName.ToolSearchToolRegex => "tool_search_tool_regex",
+                BetaServerToolUseBlockParamName.ToolSearchToolBm25 => "tool_search_tool_bm25",
                 _ => throw new AnthropicInvalidDataException(
                     string.Format("Invalid value '{0}' in {1}", value, nameof(value))
                 ),
             },
             options
         );
+    }
+}
+
+/// <summary>
+/// Tool invocation directly from the model.
+/// </summary>
+[JsonConverter(typeof(BetaServerToolUseBlockParamCallerConverter))]
+public record class BetaServerToolUseBlockParamCaller
+{
+    public object? Value { get; } = null;
+
+    JsonElement? _json = null;
+
+    public JsonElement Json
+    {
+        get { return this._json ??= JsonSerializer.SerializeToElement(this.Value); }
+    }
+
+    public JsonElement Type
+    {
+        get { return Match(betaDirect: (x) => x.Type, betaServerTool: (x) => x.Type); }
+    }
+
+    public BetaServerToolUseBlockParamCaller(BetaDirectCaller value, JsonElement? json = null)
+    {
+        this.Value = value;
+        this._json = json;
+    }
+
+    public BetaServerToolUseBlockParamCaller(BetaServerToolCaller value, JsonElement? json = null)
+    {
+        this.Value = value;
+        this._json = json;
+    }
+
+    public BetaServerToolUseBlockParamCaller(JsonElement json)
+    {
+        this._json = json;
+    }
+
+    public bool TryPickBetaDirect([NotNullWhen(true)] out BetaDirectCaller? value)
+    {
+        value = this.Value as BetaDirectCaller;
+        return value != null;
+    }
+
+    public bool TryPickBetaServerTool([NotNullWhen(true)] out BetaServerToolCaller? value)
+    {
+        value = this.Value as BetaServerToolCaller;
+        return value != null;
+    }
+
+    public void Switch(
+        System::Action<BetaDirectCaller> betaDirect,
+        System::Action<BetaServerToolCaller> betaServerTool
+    )
+    {
+        switch (this.Value)
+        {
+            case BetaDirectCaller value:
+                betaDirect(value);
+                break;
+            case BetaServerToolCaller value:
+                betaServerTool(value);
+                break;
+            default:
+                throw new AnthropicInvalidDataException(
+                    "Data did not match any variant of BetaServerToolUseBlockParamCaller"
+                );
+        }
+    }
+
+    public T Match<T>(
+        System::Func<BetaDirectCaller, T> betaDirect,
+        System::Func<BetaServerToolCaller, T> betaServerTool
+    )
+    {
+        return this.Value switch
+        {
+            BetaDirectCaller value => betaDirect(value),
+            BetaServerToolCaller value => betaServerTool(value),
+            _ => throw new AnthropicInvalidDataException(
+                "Data did not match any variant of BetaServerToolUseBlockParamCaller"
+            ),
+        };
+    }
+
+    public static implicit operator BetaServerToolUseBlockParamCaller(BetaDirectCaller value) =>
+        new(value);
+
+    public static implicit operator BetaServerToolUseBlockParamCaller(BetaServerToolCaller value) =>
+        new(value);
+
+    public void Validate()
+    {
+        if (this.Value == null)
+        {
+            throw new AnthropicInvalidDataException(
+                "Data did not match any variant of BetaServerToolUseBlockParamCaller"
+            );
+        }
+    }
+}
+
+sealed class BetaServerToolUseBlockParamCallerConverter
+    : JsonConverter<BetaServerToolUseBlockParamCaller>
+{
+    public override BetaServerToolUseBlockParamCaller? Read(
+        ref Utf8JsonReader reader,
+        System::Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        var json = JsonSerializer.Deserialize<JsonElement>(ref reader, options);
+        string? type;
+        try
+        {
+            type = json.GetProperty("type").GetString();
+        }
+        catch
+        {
+            type = null;
+        }
+
+        switch (type)
+        {
+            case "direct":
+            {
+                try
+                {
+                    var deserialized = JsonSerializer.Deserialize<BetaDirectCaller>(json, options);
+                    if (deserialized != null)
+                    {
+                        deserialized.Validate();
+                        return new(deserialized, json);
+                    }
+                }
+                catch (System::Exception e)
+                    when (e is JsonException || e is AnthropicInvalidDataException)
+                {
+                    // ignore
+                }
+
+                return new(json);
+            }
+            case "code_execution_20250825":
+            {
+                try
+                {
+                    var deserialized = JsonSerializer.Deserialize<BetaServerToolCaller>(
+                        json,
+                        options
+                    );
+                    if (deserialized != null)
+                    {
+                        deserialized.Validate();
+                        return new(deserialized, json);
+                    }
+                }
+                catch (System::Exception e)
+                    when (e is JsonException || e is AnthropicInvalidDataException)
+                {
+                    // ignore
+                }
+
+                return new(json);
+            }
+            default:
+            {
+                return new BetaServerToolUseBlockParamCaller(json);
+            }
+        }
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        BetaServerToolUseBlockParamCaller value,
+        JsonSerializerOptions options
+    )
+    {
+        JsonSerializer.Serialize(writer, value.Json, options);
     }
 }

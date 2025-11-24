@@ -195,8 +195,8 @@ public sealed record class Request : ModelBase, IFromRaw<Request>
     /// <summary>
     /// Messages API creation parameters for the individual request.
     ///
-    /// <para>See the [Messages API reference](/en/api/messages) for full documentation
-    /// on available parameters.</para>
+    /// <para>See the [Messages API reference](https://docs.claude.com/en/api/messages)
+    /// for full documentation on available parameters.</para>
     /// </summary>
     public required Params Params
     {
@@ -253,8 +253,8 @@ public sealed record class Request : ModelBase, IFromRaw<Request>
 /// <summary>
 /// Messages API creation parameters for the individual request.
 ///
-/// <para>See the [Messages API reference](/en/api/messages) for full documentation
-/// on available parameters.</para>
+/// <para>See the [Messages API reference](https://docs.claude.com/en/api/messages)
+/// for full documentation on available parameters.</para>
 /// </summary>
 [JsonConverter(typeof(ModelConverter<Params>))]
 public sealed record class Params : ModelBase, IFromRaw<Params>
@@ -499,6 +499,36 @@ public sealed record class Params : ModelBase, IFromRaw<Params>
             }
 
             this._rawData["metadata"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    /// <summary>
+    /// Configuration options for the model's output. Controls aspects like how much
+    /// effort the model puts into its response.
+    /// </summary>
+    public BetaOutputConfig? OutputConfig
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("output_config", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<BetaOutputConfig?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["output_config"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -906,6 +936,7 @@ public sealed record class Params : ModelBase, IFromRaw<Params>
             item.Validate();
         }
         this.Metadata?.Validate();
+        this.OutputConfig?.Validate();
         this.OutputFormat?.Validate();
         this.ServiceTier?.Validate();
         _ = this.StopSequences;
