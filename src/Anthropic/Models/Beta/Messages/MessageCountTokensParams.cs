@@ -193,6 +193,36 @@ public sealed record class MessageCountTokensParams : ParamsBase
     }
 
     /// <summary>
+    /// Configuration options for the model's output. Controls aspects like how much
+    /// effort the model puts into its response.
+    /// </summary>
+    public BetaOutputConfig? OutputConfig
+    {
+        get
+        {
+            if (!this._rawBodyData.TryGetValue("output_config", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<BetaOutputConfig?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawBodyData["output_config"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    /// <summary>
     ///  A schema to specify Claude's output format in responses.
     /// </summary>
     public BetaJSONOutputFormat? OutputFormat
@@ -617,6 +647,12 @@ sealed class System1Converter : JsonConverter<System1>
     }
 }
 
+/// <summary>
+/// Configuration for a group of tools from an MCP server.
+///
+/// <para>Allows configuring enabled status and defer_loading for all tools from
+/// an MCP server, with optional per-tool overrides.</para>
+/// </summary>
 [JsonConverter(typeof(ToolConverter))]
 public record class Tool
 {
@@ -643,11 +679,42 @@ public record class Tool
                 betaMemoryTool20250818: (x) => x.CacheControl,
                 betaToolComputerUse20250124: (x) => x.CacheControl,
                 betaToolTextEditor20241022: (x) => x.CacheControl,
+                betaToolComputerUse20251124: (x) => x.CacheControl,
                 betaToolTextEditor20250124: (x) => x.CacheControl,
                 betaToolTextEditor20250429: (x) => x.CacheControl,
                 betaToolTextEditor20250728: (x) => x.CacheControl,
                 betaWebSearchTool20250305: (x) => x.CacheControl,
-                betaWebFetchTool20250910: (x) => x.CacheControl
+                betaWebFetchTool20250910: (x) => x.CacheControl,
+                betaToolSearchToolBm25_20251119: (x) => x.CacheControl,
+                betaToolSearchToolRegex20251119: (x) => x.CacheControl,
+                betaMCPToolset: (x) => x.CacheControl
+            );
+        }
+    }
+
+    public bool? DeferLoading
+    {
+        get
+        {
+            return Match<bool?>(
+                beta: (x) => x.DeferLoading,
+                betaToolBash20241022: (x) => x.DeferLoading,
+                betaToolBash20250124: (x) => x.DeferLoading,
+                betaCodeExecutionTool20250522: (x) => x.DeferLoading,
+                betaCodeExecutionTool20250825: (x) => x.DeferLoading,
+                betaToolComputerUse20241022: (x) => x.DeferLoading,
+                betaMemoryTool20250818: (x) => x.DeferLoading,
+                betaToolComputerUse20250124: (x) => x.DeferLoading,
+                betaToolTextEditor20241022: (x) => x.DeferLoading,
+                betaToolComputerUse20251124: (x) => x.DeferLoading,
+                betaToolTextEditor20250124: (x) => x.DeferLoading,
+                betaToolTextEditor20250429: (x) => x.DeferLoading,
+                betaToolTextEditor20250728: (x) => x.DeferLoading,
+                betaWebSearchTool20250305: (x) => x.DeferLoading,
+                betaWebFetchTool20250910: (x) => x.DeferLoading,
+                betaToolSearchToolBm25_20251119: (x) => x.DeferLoading,
+                betaToolSearchToolRegex20251119: (x) => x.DeferLoading,
+                betaMCPToolset: (_) => null
             );
         }
     }
@@ -666,11 +733,15 @@ public record class Tool
                 betaMemoryTool20250818: (x) => x.Strict,
                 betaToolComputerUse20250124: (x) => x.Strict,
                 betaToolTextEditor20241022: (x) => x.Strict,
+                betaToolComputerUse20251124: (x) => x.Strict,
                 betaToolTextEditor20250124: (x) => x.Strict,
                 betaToolTextEditor20250429: (x) => x.Strict,
                 betaToolTextEditor20250728: (x) => x.Strict,
                 betaWebSearchTool20250305: (x) => x.Strict,
-                betaWebFetchTool20250910: (x) => x.Strict
+                betaWebFetchTool20250910: (x) => x.Strict,
+                betaToolSearchToolBm25_20251119: (x) => x.Strict,
+                betaToolSearchToolRegex20251119: (x) => x.Strict,
+                betaMCPToolset: (_) => null
             );
         }
     }
@@ -689,11 +760,15 @@ public record class Tool
                 betaMemoryTool20250818: (_) => null,
                 betaToolComputerUse20250124: (x) => x.DisplayHeightPx,
                 betaToolTextEditor20241022: (_) => null,
+                betaToolComputerUse20251124: (x) => x.DisplayHeightPx,
                 betaToolTextEditor20250124: (_) => null,
                 betaToolTextEditor20250429: (_) => null,
                 betaToolTextEditor20250728: (_) => null,
                 betaWebSearchTool20250305: (_) => null,
-                betaWebFetchTool20250910: (_) => null
+                betaWebFetchTool20250910: (_) => null,
+                betaToolSearchToolBm25_20251119: (_) => null,
+                betaToolSearchToolRegex20251119: (_) => null,
+                betaMCPToolset: (_) => null
             );
         }
     }
@@ -712,11 +787,15 @@ public record class Tool
                 betaMemoryTool20250818: (_) => null,
                 betaToolComputerUse20250124: (x) => x.DisplayWidthPx,
                 betaToolTextEditor20241022: (_) => null,
+                betaToolComputerUse20251124: (x) => x.DisplayWidthPx,
                 betaToolTextEditor20250124: (_) => null,
                 betaToolTextEditor20250429: (_) => null,
                 betaToolTextEditor20250728: (_) => null,
                 betaWebSearchTool20250305: (_) => null,
-                betaWebFetchTool20250910: (_) => null
+                betaWebFetchTool20250910: (_) => null,
+                betaToolSearchToolBm25_20251119: (_) => null,
+                betaToolSearchToolRegex20251119: (_) => null,
+                betaMCPToolset: (_) => null
             );
         }
     }
@@ -735,11 +814,15 @@ public record class Tool
                 betaMemoryTool20250818: (_) => null,
                 betaToolComputerUse20250124: (x) => x.DisplayNumber,
                 betaToolTextEditor20241022: (_) => null,
+                betaToolComputerUse20251124: (x) => x.DisplayNumber,
                 betaToolTextEditor20250124: (_) => null,
                 betaToolTextEditor20250429: (_) => null,
                 betaToolTextEditor20250728: (_) => null,
                 betaWebSearchTool20250305: (_) => null,
-                betaWebFetchTool20250910: (_) => null
+                betaWebFetchTool20250910: (_) => null,
+                betaToolSearchToolBm25_20251119: (_) => null,
+                betaToolSearchToolRegex20251119: (_) => null,
+                betaMCPToolset: (_) => null
             );
         }
     }
@@ -758,11 +841,15 @@ public record class Tool
                 betaMemoryTool20250818: (_) => null,
                 betaToolComputerUse20250124: (_) => null,
                 betaToolTextEditor20241022: (_) => null,
+                betaToolComputerUse20251124: (_) => null,
                 betaToolTextEditor20250124: (_) => null,
                 betaToolTextEditor20250429: (_) => null,
                 betaToolTextEditor20250728: (_) => null,
                 betaWebSearchTool20250305: (x) => x.MaxUses,
-                betaWebFetchTool20250910: (x) => x.MaxUses
+                betaWebFetchTool20250910: (x) => x.MaxUses,
+                betaToolSearchToolBm25_20251119: (_) => null,
+                betaToolSearchToolRegex20251119: (_) => null,
+                betaMCPToolset: (_) => null
             );
         }
     }
@@ -821,6 +908,12 @@ public record class Tool
         this._json = json;
     }
 
+    public Tool(BetaToolComputerUse20251124 value, JsonElement? json = null)
+    {
+        this.Value = value;
+        this._json = json;
+    }
+
     public Tool(BetaToolTextEditor20250124 value, JsonElement? json = null)
     {
         this.Value = value;
@@ -846,6 +939,24 @@ public record class Tool
     }
 
     public Tool(BetaWebFetchTool20250910 value, JsonElement? json = null)
+    {
+        this.Value = value;
+        this._json = json;
+    }
+
+    public Tool(BetaToolSearchToolBm25_20251119 value, JsonElement? json = null)
+    {
+        this.Value = value;
+        this._json = json;
+    }
+
+    public Tool(BetaToolSearchToolRegex20251119 value, JsonElement? json = null)
+    {
+        this.Value = value;
+        this._json = json;
+    }
+
+    public Tool(BetaMCPToolset value, JsonElement? json = null)
     {
         this.Value = value;
         this._json = json;
@@ -920,6 +1031,14 @@ public record class Tool
         return value != null;
     }
 
+    public bool TryPickBetaToolComputerUse20251124(
+        [NotNullWhen(true)] out BetaToolComputerUse20251124? value
+    )
+    {
+        value = this.Value as BetaToolComputerUse20251124;
+        return value != null;
+    }
+
     public bool TryPickBetaToolTextEditor20250124(
         [NotNullWhen(true)] out BetaToolTextEditor20250124? value
     )
@@ -960,6 +1079,28 @@ public record class Tool
         return value != null;
     }
 
+    public bool TryPickBetaToolSearchToolBm25_20251119(
+        [NotNullWhen(true)] out BetaToolSearchToolBm25_20251119? value
+    )
+    {
+        value = this.Value as BetaToolSearchToolBm25_20251119;
+        return value != null;
+    }
+
+    public bool TryPickBetaToolSearchToolRegex20251119(
+        [NotNullWhen(true)] out BetaToolSearchToolRegex20251119? value
+    )
+    {
+        value = this.Value as BetaToolSearchToolRegex20251119;
+        return value != null;
+    }
+
+    public bool TryPickBetaMCPToolset([NotNullWhen(true)] out BetaMCPToolset? value)
+    {
+        value = this.Value as BetaMCPToolset;
+        return value != null;
+    }
+
     public void Switch(
         System::Action<BetaTool> beta,
         System::Action<BetaToolBash20241022> betaToolBash20241022,
@@ -970,11 +1111,15 @@ public record class Tool
         System::Action<BetaMemoryTool20250818> betaMemoryTool20250818,
         System::Action<BetaToolComputerUse20250124> betaToolComputerUse20250124,
         System::Action<BetaToolTextEditor20241022> betaToolTextEditor20241022,
+        System::Action<BetaToolComputerUse20251124> betaToolComputerUse20251124,
         System::Action<BetaToolTextEditor20250124> betaToolTextEditor20250124,
         System::Action<BetaToolTextEditor20250429> betaToolTextEditor20250429,
         System::Action<BetaToolTextEditor20250728> betaToolTextEditor20250728,
         System::Action<BetaWebSearchTool20250305> betaWebSearchTool20250305,
-        System::Action<BetaWebFetchTool20250910> betaWebFetchTool20250910
+        System::Action<BetaWebFetchTool20250910> betaWebFetchTool20250910,
+        System::Action<BetaToolSearchToolBm25_20251119> betaToolSearchToolBm25_20251119,
+        System::Action<BetaToolSearchToolRegex20251119> betaToolSearchToolRegex20251119,
+        System::Action<BetaMCPToolset> betaMCPToolset
     )
     {
         switch (this.Value)
@@ -1006,6 +1151,9 @@ public record class Tool
             case BetaToolTextEditor20241022 value:
                 betaToolTextEditor20241022(value);
                 break;
+            case BetaToolComputerUse20251124 value:
+                betaToolComputerUse20251124(value);
+                break;
             case BetaToolTextEditor20250124 value:
                 betaToolTextEditor20250124(value);
                 break;
@@ -1020,6 +1168,15 @@ public record class Tool
                 break;
             case BetaWebFetchTool20250910 value:
                 betaWebFetchTool20250910(value);
+                break;
+            case BetaToolSearchToolBm25_20251119 value:
+                betaToolSearchToolBm25_20251119(value);
+                break;
+            case BetaToolSearchToolRegex20251119 value:
+                betaToolSearchToolRegex20251119(value);
+                break;
+            case BetaMCPToolset value:
+                betaMCPToolset(value);
                 break;
             default:
                 throw new AnthropicInvalidDataException("Data did not match any variant of Tool");
@@ -1036,11 +1193,15 @@ public record class Tool
         System::Func<BetaMemoryTool20250818, T> betaMemoryTool20250818,
         System::Func<BetaToolComputerUse20250124, T> betaToolComputerUse20250124,
         System::Func<BetaToolTextEditor20241022, T> betaToolTextEditor20241022,
+        System::Func<BetaToolComputerUse20251124, T> betaToolComputerUse20251124,
         System::Func<BetaToolTextEditor20250124, T> betaToolTextEditor20250124,
         System::Func<BetaToolTextEditor20250429, T> betaToolTextEditor20250429,
         System::Func<BetaToolTextEditor20250728, T> betaToolTextEditor20250728,
         System::Func<BetaWebSearchTool20250305, T> betaWebSearchTool20250305,
-        System::Func<BetaWebFetchTool20250910, T> betaWebFetchTool20250910
+        System::Func<BetaWebFetchTool20250910, T> betaWebFetchTool20250910,
+        System::Func<BetaToolSearchToolBm25_20251119, T> betaToolSearchToolBm25_20251119,
+        System::Func<BetaToolSearchToolRegex20251119, T> betaToolSearchToolRegex20251119,
+        System::Func<BetaMCPToolset, T> betaMCPToolset
     )
     {
         return this.Value switch
@@ -1054,11 +1215,15 @@ public record class Tool
             BetaMemoryTool20250818 value => betaMemoryTool20250818(value),
             BetaToolComputerUse20250124 value => betaToolComputerUse20250124(value),
             BetaToolTextEditor20241022 value => betaToolTextEditor20241022(value),
+            BetaToolComputerUse20251124 value => betaToolComputerUse20251124(value),
             BetaToolTextEditor20250124 value => betaToolTextEditor20250124(value),
             BetaToolTextEditor20250429 value => betaToolTextEditor20250429(value),
             BetaToolTextEditor20250728 value => betaToolTextEditor20250728(value),
             BetaWebSearchTool20250305 value => betaWebSearchTool20250305(value),
             BetaWebFetchTool20250910 value => betaWebFetchTool20250910(value),
+            BetaToolSearchToolBm25_20251119 value => betaToolSearchToolBm25_20251119(value),
+            BetaToolSearchToolRegex20251119 value => betaToolSearchToolRegex20251119(value),
+            BetaMCPToolset value => betaMCPToolset(value),
             _ => throw new AnthropicInvalidDataException("Data did not match any variant of Tool"),
         };
     }
@@ -1081,6 +1246,8 @@ public record class Tool
 
     public static implicit operator Tool(BetaToolTextEditor20241022 value) => new(value);
 
+    public static implicit operator Tool(BetaToolComputerUse20251124 value) => new(value);
+
     public static implicit operator Tool(BetaToolTextEditor20250124 value) => new(value);
 
     public static implicit operator Tool(BetaToolTextEditor20250429 value) => new(value);
@@ -1090,6 +1257,12 @@ public record class Tool
     public static implicit operator Tool(BetaWebSearchTool20250305 value) => new(value);
 
     public static implicit operator Tool(BetaWebFetchTool20250910 value) => new(value);
+
+    public static implicit operator Tool(BetaToolSearchToolBm25_20251119 value) => new(value);
+
+    public static implicit operator Tool(BetaToolSearchToolRegex20251119 value) => new(value);
+
+    public static implicit operator Tool(BetaMCPToolset value) => new(value);
 
     public void Validate()
     {
@@ -1252,6 +1425,23 @@ sealed class ToolConverter : JsonConverter<Tool>
 
         try
         {
+            var deserialized = JsonSerializer.Deserialize<BetaToolComputerUse20251124>(
+                json,
+                options
+            );
+            if (deserialized != null)
+            {
+                deserialized.Validate();
+                return new(deserialized, json);
+            }
+        }
+        catch (System::Exception e) when (e is JsonException || e is AnthropicInvalidDataException)
+        {
+            // ignore
+        }
+
+        try
+        {
             var deserialized = JsonSerializer.Deserialize<BetaToolTextEditor20250124>(
                 json,
                 options
@@ -1318,6 +1508,54 @@ sealed class ToolConverter : JsonConverter<Tool>
         try
         {
             var deserialized = JsonSerializer.Deserialize<BetaWebFetchTool20250910>(json, options);
+            if (deserialized != null)
+            {
+                deserialized.Validate();
+                return new(deserialized, json);
+            }
+        }
+        catch (System::Exception e) when (e is JsonException || e is AnthropicInvalidDataException)
+        {
+            // ignore
+        }
+
+        try
+        {
+            var deserialized = JsonSerializer.Deserialize<BetaToolSearchToolBm25_20251119>(
+                json,
+                options
+            );
+            if (deserialized != null)
+            {
+                deserialized.Validate();
+                return new(deserialized, json);
+            }
+        }
+        catch (System::Exception e) when (e is JsonException || e is AnthropicInvalidDataException)
+        {
+            // ignore
+        }
+
+        try
+        {
+            var deserialized = JsonSerializer.Deserialize<BetaToolSearchToolRegex20251119>(
+                json,
+                options
+            );
+            if (deserialized != null)
+            {
+                deserialized.Validate();
+                return new(deserialized, json);
+            }
+        }
+        catch (System::Exception e) when (e is JsonException || e is AnthropicInvalidDataException)
+        {
+            // ignore
+        }
+
+        try
+        {
+            var deserialized = JsonSerializer.Deserialize<BetaMCPToolset>(json, options);
             if (deserialized != null)
             {
                 deserialized.Validate();

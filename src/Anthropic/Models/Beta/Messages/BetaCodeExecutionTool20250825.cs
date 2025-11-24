@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -6,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Anthropic.Core;
 using Anthropic.Exceptions;
+using System = System;
 
 namespace Anthropic.Models.Beta.Messages;
 
@@ -26,7 +26,7 @@ public sealed record class BetaCodeExecutionTool20250825
             if (!this._rawData.TryGetValue("name", out JsonElement element))
                 throw new AnthropicInvalidDataException(
                     "'name' cannot be null",
-                    new ArgumentOutOfRangeException("name", "Missing required argument")
+                    new System::ArgumentOutOfRangeException("name", "Missing required argument")
                 );
 
             return JsonSerializer.Deserialize<JsonElement>(element, ModelBase.SerializerOptions);
@@ -47,7 +47,7 @@ public sealed record class BetaCodeExecutionTool20250825
             if (!this._rawData.TryGetValue("type", out JsonElement element))
                 throw new AnthropicInvalidDataException(
                     "'type' cannot be null",
-                    new ArgumentOutOfRangeException("type", "Missing required argument")
+                    new System::ArgumentOutOfRangeException("type", "Missing required argument")
                 );
 
             return JsonSerializer.Deserialize<JsonElement>(element, ModelBase.SerializerOptions);
@@ -55,6 +55,32 @@ public sealed record class BetaCodeExecutionTool20250825
         init
         {
             this._rawData["type"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    public List<ApiEnum<string, AllowedCallerModel>>? AllowedCallers
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("allowed_callers", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCallerModel>>?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["allowed_callers"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -79,6 +105,33 @@ public sealed record class BetaCodeExecutionTool20250825
         init
         {
             this._rawData["cache_control"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    /// <summary>
+    /// If true, tool will not be included in initial system prompt. Only loaded when
+    /// returned via tool_reference from tool search.
+    /// </summary>
+    public bool? DeferLoading
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("defer_loading", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<bool?>(element, ModelBase.SerializerOptions);
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["defer_loading"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -128,7 +181,12 @@ public sealed record class BetaCodeExecutionTool20250825
         {
             throw new AnthropicInvalidDataException("Invalid value given for constant");
         }
+        foreach (var item in this.AllowedCallers ?? [])
+        {
+            item.Validate();
+        }
         this.CacheControl?.Validate();
+        _ = this.DeferLoading;
         _ = this.Strict;
     }
 
@@ -159,5 +217,49 @@ public sealed record class BetaCodeExecutionTool20250825
     )
     {
         return new(FrozenDictionary.ToFrozenDictionary(rawData));
+    }
+}
+
+[JsonConverter(typeof(AllowedCallerModelConverter))]
+public enum AllowedCallerModel
+{
+    Direct,
+    CodeExecution20250825,
+}
+
+sealed class AllowedCallerModelConverter : JsonConverter<AllowedCallerModel>
+{
+    public override AllowedCallerModel Read(
+        ref Utf8JsonReader reader,
+        System::Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return JsonSerializer.Deserialize<string>(ref reader, options) switch
+        {
+            "direct" => AllowedCallerModel.Direct,
+            "code_execution_20250825" => AllowedCallerModel.CodeExecution20250825,
+            _ => (AllowedCallerModel)(-1),
+        };
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        AllowedCallerModel value,
+        JsonSerializerOptions options
+    )
+    {
+        JsonSerializer.Serialize(
+            writer,
+            value switch
+            {
+                AllowedCallerModel.Direct => "direct",
+                AllowedCallerModel.CodeExecution20250825 => "code_execution_20250825",
+                _ => throw new AnthropicInvalidDataException(
+                    string.Format("Invalid value '{0}' in {1}", value, nameof(value))
+                ),
+            },
+            options
+        );
     }
 }

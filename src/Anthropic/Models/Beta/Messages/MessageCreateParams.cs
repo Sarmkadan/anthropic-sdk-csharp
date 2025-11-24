@@ -273,6 +273,36 @@ public sealed record class MessageCreateParams : ParamsBase
     }
 
     /// <summary>
+    /// Configuration options for the model's output. Controls aspects like how much
+    /// effort the model puts into its response.
+    /// </summary>
+    public BetaOutputConfig? OutputConfig
+    {
+        get
+        {
+            if (!this._rawBodyData.TryGetValue("output_config", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<BetaOutputConfig?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawBodyData["output_config"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    /// <summary>
     ///  A schema to specify Claude's output format in responses.
     /// </summary>
     public BetaJSONOutputFormat? OutputFormat

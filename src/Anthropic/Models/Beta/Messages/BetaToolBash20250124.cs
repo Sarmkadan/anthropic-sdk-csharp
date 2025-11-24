@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -6,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Anthropic.Core;
 using Anthropic.Exceptions;
+using System = System;
 
 namespace Anthropic.Models.Beta.Messages;
 
@@ -24,7 +24,7 @@ public sealed record class BetaToolBash20250124 : ModelBase, IFromRaw<BetaToolBa
             if (!this._rawData.TryGetValue("name", out JsonElement element))
                 throw new AnthropicInvalidDataException(
                     "'name' cannot be null",
-                    new ArgumentOutOfRangeException("name", "Missing required argument")
+                    new System::ArgumentOutOfRangeException("name", "Missing required argument")
                 );
 
             return JsonSerializer.Deserialize<JsonElement>(element, ModelBase.SerializerOptions);
@@ -45,7 +45,7 @@ public sealed record class BetaToolBash20250124 : ModelBase, IFromRaw<BetaToolBa
             if (!this._rawData.TryGetValue("type", out JsonElement element))
                 throw new AnthropicInvalidDataException(
                     "'type' cannot be null",
-                    new ArgumentOutOfRangeException("type", "Missing required argument")
+                    new System::ArgumentOutOfRangeException("type", "Missing required argument")
                 );
 
             return JsonSerializer.Deserialize<JsonElement>(element, ModelBase.SerializerOptions);
@@ -53,6 +53,32 @@ public sealed record class BetaToolBash20250124 : ModelBase, IFromRaw<BetaToolBa
         init
         {
             this._rawData["type"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    public List<ApiEnum<string, AllowedCaller4>>? AllowedCallers
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("allowed_callers", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<List<ApiEnum<string, AllowedCaller4>>?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["allowed_callers"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -77,6 +103,59 @@ public sealed record class BetaToolBash20250124 : ModelBase, IFromRaw<BetaToolBa
         init
         {
             this._rawData["cache_control"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    /// <summary>
+    /// If true, tool will not be included in initial system prompt. Only loaded when
+    /// returned via tool_reference from tool search.
+    /// </summary>
+    public bool? DeferLoading
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("defer_loading", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<bool?>(element, ModelBase.SerializerOptions);
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["defer_loading"] = JsonSerializer.SerializeToElement(
+                value,
+                ModelBase.SerializerOptions
+            );
+        }
+    }
+
+    public List<Dictionary<string, JsonElement>>? InputExamples
+    {
+        get
+        {
+            if (!this._rawData.TryGetValue("input_examples", out JsonElement element))
+                return null;
+
+            return JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>?>(
+                element,
+                ModelBase.SerializerOptions
+            );
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawData["input_examples"] = JsonSerializer.SerializeToElement(
                 value,
                 ModelBase.SerializerOptions
             );
@@ -121,7 +200,13 @@ public sealed record class BetaToolBash20250124 : ModelBase, IFromRaw<BetaToolBa
         {
             throw new AnthropicInvalidDataException("Invalid value given for constant");
         }
+        foreach (var item in this.AllowedCallers ?? [])
+        {
+            item.Validate();
+        }
         this.CacheControl?.Validate();
+        _ = this.DeferLoading;
+        _ = this.InputExamples;
         _ = this.Strict;
     }
 
@@ -152,5 +237,49 @@ public sealed record class BetaToolBash20250124 : ModelBase, IFromRaw<BetaToolBa
     )
     {
         return new(FrozenDictionary.ToFrozenDictionary(rawData));
+    }
+}
+
+[JsonConverter(typeof(AllowedCaller4Converter))]
+public enum AllowedCaller4
+{
+    Direct,
+    CodeExecution20250825,
+}
+
+sealed class AllowedCaller4Converter : JsonConverter<AllowedCaller4>
+{
+    public override AllowedCaller4 Read(
+        ref Utf8JsonReader reader,
+        System::Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return JsonSerializer.Deserialize<string>(ref reader, options) switch
+        {
+            "direct" => AllowedCaller4.Direct,
+            "code_execution_20250825" => AllowedCaller4.CodeExecution20250825,
+            _ => (AllowedCaller4)(-1),
+        };
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        AllowedCaller4 value,
+        JsonSerializerOptions options
+    )
+    {
+        JsonSerializer.Serialize(
+            writer,
+            value switch
+            {
+                AllowedCaller4.Direct => "direct",
+                AllowedCaller4.CodeExecution20250825 => "code_execution_20250825",
+                _ => throw new AnthropicInvalidDataException(
+                    string.Format("Invalid value '{0}' in {1}", value, nameof(value))
+                ),
+            },
+            options
+        );
     }
 }
