@@ -13,7 +13,7 @@ public class MessageServiceTest : TestBase
             {
                 MaxTokens = 1024,
                 Messages = [new() { Content = "Hello, world", Role = Role.User }],
-                Model = Model.Claude3_7SonnetLatest,
+                Model = Model.ClaudeOpus4_5_20251101,
             }
         );
         message.Validate();
@@ -27,7 +27,7 @@ public class MessageServiceTest : TestBase
             {
                 MaxTokens = 1024,
                 Messages = [new() { Content = "Hello, world", Role = Role.User }],
-                Model = Model.Claude3_7SonnetLatest,
+                Model = Model.ClaudeOpus4_5_20251101,
             }
         );
 
@@ -44,7 +44,7 @@ public class MessageServiceTest : TestBase
             new()
             {
                 Messages = [new() { Content = "string", Role = Role.User }],
-                Model = Model.Claude3_7SonnetLatest,
+                Model = Model.ClaudeOpus4_5_20251101,
             }
         );
         messageTokensCount.Validate();

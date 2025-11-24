@@ -26,7 +26,7 @@ public class BatchServiceTest : TestBase
                             [
                                 new() { Content = "Hello, world", Role = Messages::Role.User },
                             ],
-                            Model = global::Anthropic.Models.Messages.Model.Claude3_7SonnetLatest,
+                            Model = global::Anthropic.Models.Messages.Model.ClaudeOpus4_5_20251101,
                             Container = new Messages::BetaContainerParams()
                             {
                                 ID = "id",
@@ -69,6 +69,7 @@ public class BatchServiceTest : TestBase
                                 },
                             ],
                             Metadata = new() { UserID = "13803d75-b4b5-4c3e-b2a2-6f21399b021b" },
+                            OutputConfig = new() { Effort = Messages::Effort.Low },
                             OutputFormat = new()
                             {
                                 Schema = new Dictionary<string, JsonElement>()
@@ -122,8 +123,17 @@ public class BatchServiceTest : TestBase
                                         Required = ["location"],
                                     },
                                     Name = "name",
+                                    AllowedCallers = [Messages::AllowedCaller2.Direct],
                                     CacheControl = new() { TTL = Messages::TTL.TTL5m },
+                                    DeferLoading = true,
                                     Description = "Get the current weather in a given location",
+                                    InputExamples =
+                                    [
+                                        new Dictionary<string, JsonElement>()
+                                        {
+                                            { "foo", JsonSerializer.SerializeToElement("bar") },
+                                        },
+                                    ],
                                     Strict = true,
                                     Type = Messages::BetaToolType.Custom,
                                 },
