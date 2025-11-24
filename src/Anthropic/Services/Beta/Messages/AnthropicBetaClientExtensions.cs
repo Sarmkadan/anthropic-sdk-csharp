@@ -981,7 +981,7 @@ public static class AnthropicBetaClientExtensions
                     return new FunctionCallContent(
                         toolUse.ID,
                         toolUse.Name,
-                        toolUse.Properties.TryGetValue("input", out JsonElement element)
+                        toolUse.RawData.TryGetValue("input", out JsonElement element)
                             ? (Dictionary<string, object?>?)JsonSerializer.Deserialize(
                                 element,
                                 AIJsonUtilities.DefaultOptions.GetTypeInfo(typeof(Dictionary<string, object?>))
@@ -1023,108 +1023,108 @@ public static class AnthropicBetaClientExtensions
                     };
 
                 case BetaCodeExecutionToolResultBlock ce:
-                {
-                    CodeInterpreterToolResultContent c = new()
                     {
-                        CallId = ce.ToolUseID,
-                        RawRepresentation = ce,
-                    };
-
-                    if (ce.Content.TryPickError(out var ceError))
-                    {
-                        (c.Outputs ??= []).Add(
-                            new ErrorContent(null)
-                            {
-                                ErrorCode = ceError.ErrorCode.Value().ToString(),
-                            }
-                        );
-                    }
-
-                    if (ce.Content.TryPickResultBlock(out var ceOutput))
-                    {
-                        if (!string.IsNullOrWhiteSpace(ceOutput.Stdout))
+                        CodeInterpreterToolResultContent c = new()
                         {
-                            (c.Outputs ??= []).Add(new TextContent(ceOutput.Stdout));
-                        }
+                            CallId = ce.ToolUseID,
+                            RawRepresentation = ce,
+                        };
 
-                        if (!string.IsNullOrWhiteSpace(ceOutput.Stderr) || ceOutput.ReturnCode != 0)
+                        if (ce.Content.TryPickError(out var ceError))
                         {
                             (c.Outputs ??= []).Add(
-                                new ErrorContent(ceOutput.Stderr)
+                                new ErrorContent(null)
                                 {
-                                    ErrorCode = ceOutput.ReturnCode.ToString(
-                                        CultureInfo.InvariantCulture
-                                    ),
+                                    ErrorCode = ceError.ErrorCode.Value().ToString(),
                                 }
                             );
                         }
 
-                        if (ceOutput.Content is { Count: > 0 })
+                        if (ce.Content.TryPickResultBlock(out var ceOutput))
                         {
-                            foreach (var ceOutputContent in ceOutput.Content)
+                            if (!string.IsNullOrWhiteSpace(ceOutput.Stdout))
+                            {
+                                (c.Outputs ??= []).Add(new TextContent(ceOutput.Stdout));
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(ceOutput.Stderr) || ceOutput.ReturnCode != 0)
                             {
                                 (c.Outputs ??= []).Add(
-                                    new HostedFileContent(ceOutputContent.FileID)
+                                    new ErrorContent(ceOutput.Stderr)
+                                    {
+                                        ErrorCode = ceOutput.ReturnCode.ToString(
+                                            CultureInfo.InvariantCulture
+                                        ),
+                                    }
                                 );
                             }
-                        }
-                    }
 
-                    return c;
-                }
+                            if (ceOutput.Content is { Count: > 0 })
+                            {
+                                foreach (var ceOutputContent in ceOutput.Content)
+                                {
+                                    (c.Outputs ??= []).Add(
+                                        new HostedFileContent(ceOutputContent.FileID)
+                                    );
+                                }
+                            }
+                        }
+
+                        return c;
+                    }
 
                 case BetaBashCodeExecutionToolResultBlock ce:
-                // This is the same as BetaCodeExecutionToolResultBlock but with a different type names.
-                // Keep both of them in sync.
-                {
-                    CodeInterpreterToolResultContent c = new()
+                    // This is the same as BetaCodeExecutionToolResultBlock but with a different type names.
+                    // Keep both of them in sync.
                     {
-                        CallId = ce.ToolUseID,
-                        RawRepresentation = ce,
-                    };
-
-                    if (ce.Content.TryPickBetaBashCodeExecutionToolResultError(out var ceError))
-                    {
-                        (c.Outputs ??= []).Add(
-                            new ErrorContent(null)
-                            {
-                                ErrorCode = ceError.ErrorCode.Value().ToString(),
-                            }
-                        );
-                    }
-
-                    if (ce.Content.TryPickBetaBashCodeExecutionResultBlock(out var ceOutput))
-                    {
-                        if (!string.IsNullOrWhiteSpace(ceOutput.Stdout))
+                        CodeInterpreterToolResultContent c = new()
                         {
-                            (c.Outputs ??= []).Add(new TextContent(ceOutput.Stdout));
-                        }
+                            CallId = ce.ToolUseID,
+                            RawRepresentation = ce,
+                        };
 
-                        if (!string.IsNullOrWhiteSpace(ceOutput.Stderr) || ceOutput.ReturnCode != 0)
+                        if (ce.Content.TryPickBetaBashCodeExecutionToolResultError(out var ceError))
                         {
                             (c.Outputs ??= []).Add(
-                                new ErrorContent(ceOutput.Stderr)
+                                new ErrorContent(null)
                                 {
-                                    ErrorCode = ceOutput.ReturnCode.ToString(
-                                        CultureInfo.InvariantCulture
-                                    ),
+                                    ErrorCode = ceError.ErrorCode.Value().ToString(),
                                 }
                             );
                         }
 
-                        if (ceOutput.Content is { Count: > 0 })
+                        if (ce.Content.TryPickBetaBashCodeExecutionResultBlock(out var ceOutput))
                         {
-                            foreach (var ceOutputContent in ceOutput.Content)
+                            if (!string.IsNullOrWhiteSpace(ceOutput.Stdout))
+                            {
+                                (c.Outputs ??= []).Add(new TextContent(ceOutput.Stdout));
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(ceOutput.Stderr) || ceOutput.ReturnCode != 0)
                             {
                                 (c.Outputs ??= []).Add(
-                                    new HostedFileContent(ceOutputContent.FileID)
+                                    new ErrorContent(ceOutput.Stderr)
+                                    {
+                                        ErrorCode = ceOutput.ReturnCode.ToString(
+                                            CultureInfo.InvariantCulture
+                                        ),
+                                    }
                                 );
                             }
-                        }
-                    }
 
-                    return c;
-                }
+                            if (ceOutput.Content is { Count: > 0 })
+                            {
+                                foreach (var ceOutputContent in ceOutput.Content)
+                                {
+                                    (c.Outputs ??= []).Add(
+                                        new HostedFileContent(ceOutputContent.FileID)
+                                    );
+                                }
+                            }
+                        }
+
+                        return c;
+                    }
 
                 default:
                     return new AIContent() { RawRepresentation = block.Value };

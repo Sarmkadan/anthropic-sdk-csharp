@@ -855,7 +855,7 @@ public static class AnthropicClientExtensions
                     return new FunctionCallContent(
                         toolUse.ID,
                         toolUse.Name,
-                        toolUse.Properties.TryGetValue("input", out JsonElement element)
+                        toolUse.RawData.TryGetValue("input", out JsonElement element)
                             ? (Dictionary<string, object?>?)JsonSerializer.Deserialize(
                                 element,
                                 AIJsonUtilities.DefaultOptions.GetTypeInfo(typeof(Dictionary<string, object?>))
