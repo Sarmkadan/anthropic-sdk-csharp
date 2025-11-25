@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>
       The official .NET library for the Anthropic C# service API.
@@ -6,7 +6,7 @@
     <AssemblyTitle>SDK Code Generation Anthropic C#</AssemblyTitle>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Nullable>enable</Nullable>
-    <VersionPrefix>10.3.0</VersionPrefix>
+    <VersionPrefix>10.2.1</VersionPrefix>
     <TargetFrameworks>net8.0;net9.0;netstandard2.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <!-- Generate an XML documentation file for the project. -->
