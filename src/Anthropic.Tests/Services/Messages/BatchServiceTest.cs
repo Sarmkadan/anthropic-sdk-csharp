@@ -33,7 +33,7 @@ public class BatchServiceTest : TestBase
                             Stream = true,
                             System = new(
                                 [
-                                    new()
+                                    new Messages::TextBlockParam()
                                     {
                                         Text = "Today's date is 2024-06-01.",
                                         CacheControl = new() { TTL = Messages::TTL.TTL5m },

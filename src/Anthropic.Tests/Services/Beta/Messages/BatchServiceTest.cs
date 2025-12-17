@@ -80,7 +80,7 @@ public class BatchServiceTest : TestBase
                             Stream = true,
                             System = new(
                                 [
-                                    new()
+                                    new BetaTextBlockParam()
                                     {
                                         Text = "Today's date is 2024-06-01.",
                                         CacheControl = new() { TTL = TTL.TTL5m },
