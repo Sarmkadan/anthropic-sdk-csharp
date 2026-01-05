@@ -48,7 +48,6 @@ jobs:
 
       - name: Build SDK
         run: ./scripts/build
-        shell: bash
 
   test:
     timeout-minutes: 10
@@ -65,3 +64,4 @@ jobs:
 
       - name: Run tests
         run: ./scripts/test
+        shell: bash
