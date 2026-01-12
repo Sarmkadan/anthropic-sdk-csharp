@@ -9,6 +9,9 @@ using Anthropic.Services.Beta;
 
 namespace Anthropic.Models.Beta.Skills;
 
+/// <summary>
+/// A single page from the paginated endpoint that <see cref="ISkillService.List(SkillListParams, CancellationToken)"/> queries.
+/// </summary>
 public sealed class SkillListPage(
     ISkillServiceWithRawResponse service,
     SkillListParams parameters,
