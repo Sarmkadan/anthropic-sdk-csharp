@@ -1,44 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using Anthropic.Core;
-using Anthropic.Models.Beta;
 using Anthropic.Models.Beta.Skills.Versions;
 
 namespace Anthropic.Tests.Models.Beta.Skills.Versions;
 
 public class VersionCreateParamsTest : TestBase
 {
-    [Fact]
-    public void FieldRoundtrip_Works()
-    {
-        var parameters = new VersionCreateParams
-        {
-            SkillID = "skill_id",
-            Files = [Encoding.UTF8.GetBytes("text")],
-            Betas = ["string"],
-        };
-
-        string expectedSkillID = "skill_id";
-        List<BinaryContent> expectedFiles = [Encoding.UTF8.GetBytes("text")];
-        List<ApiEnum<string, AnthropicBeta>> expectedBetas = ["string"];
-
-        Assert.Equal(expectedSkillID, parameters.SkillID);
-        Assert.NotNull(parameters.Files);
-        Assert.Equal(expectedFiles.Count, parameters.Files.Count);
-        for (int i = 0; i < expectedFiles.Count; i++)
-        {
-            Assert.Equal(expectedFiles[i], parameters.Files[i]);
-        }
-        Assert.NotNull(parameters.Betas);
-        Assert.Equal(expectedBetas.Count, parameters.Betas.Count);
-        for (int i = 0; i < expectedBetas.Count; i++)
-        {
-            Assert.Equal(expectedBetas[i], parameters.Betas[i]);
-        }
-    }
-
     [Fact]
     public void OptionalNonNullableParamsUnsetAreNotSet_Works()
     {

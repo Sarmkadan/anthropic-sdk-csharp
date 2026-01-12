@@ -9,6 +9,9 @@ using Anthropic.Services.Beta;
 
 namespace Anthropic.Models.Beta.Files;
 
+/// <summary>
+/// A single page from the paginated endpoint that <see cref="IFileService.List(FileListParams, CancellationToken)"/> queries.
+/// </summary>
 public sealed class FileListPage(
     IFileServiceWithRawResponse service,
     FileListParams parameters,
