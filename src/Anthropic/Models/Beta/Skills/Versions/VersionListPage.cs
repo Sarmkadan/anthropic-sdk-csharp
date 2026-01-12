@@ -9,6 +9,9 @@ using Anthropic.Services.Beta.Skills;
 
 namespace Anthropic.Models.Beta.Skills.Versions;
 
+/// <summary>
+/// A single page from the paginated endpoint that <see cref="IVersionService.List(VersionListParams, CancellationToken)"/> queries.
+/// </summary>
 public sealed class VersionListPage(
     IVersionServiceWithRawResponse service,
     VersionListParams parameters,

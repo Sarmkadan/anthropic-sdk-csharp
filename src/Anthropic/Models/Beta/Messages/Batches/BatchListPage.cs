@@ -9,6 +9,9 @@ using Anthropic.Services.Beta.Messages;
 
 namespace Anthropic.Models.Beta.Messages.Batches;
 
+/// <summary>
+/// A single page from the paginated endpoint that <see cref="IBatchService.List(BatchListParams, CancellationToken)"/> queries.
+/// </summary>
 public sealed class BatchListPage(
     IBatchServiceWithRawResponse service,
     BatchListParams parameters,
