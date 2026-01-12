@@ -9,6 +9,9 @@ using Anthropic.Services.Beta;
 
 namespace Anthropic.Models.Beta.Models;
 
+/// <summary>
+/// A single page from the paginated endpoint that <see cref="IModelService.List(ModelListParams, CancellationToken)"/> queries.
+/// </summary>
 public sealed class ModelListPage(
     IModelServiceWithRawResponse service,
     ModelListParams parameters,
