@@ -105,12 +105,18 @@ public record class BatchCreateParams : ParamsBase
 
     public override string ToString() =>
         JsonSerializer.Serialize(
-            new Dictionary<string, object?>()
-            {
-                ["HeaderData"] = this._rawHeaderData.Freeze(),
-                ["QueryData"] = this._rawQueryData.Freeze(),
-                ["BodyData"] = this._rawBodyData.Freeze(),
-            },
+            FriendlyJsonPrinter.PrintValue(
+                new Dictionary<string, JsonElement>()
+                {
+                    ["HeaderData"] = FriendlyJsonPrinter.PrintValue(
+                        JsonSerializer.SerializeToElement(this._rawHeaderData.Freeze())
+                    ),
+                    ["QueryData"] = FriendlyJsonPrinter.PrintValue(
+                        JsonSerializer.SerializeToElement(this._rawQueryData.Freeze())
+                    ),
+                    ["BodyData"] = FriendlyJsonPrinter.PrintValue(this._rawBodyData.Freeze()),
+                }
+            ),
             ModelBase.ToStringSerializerOptions
         );
 
@@ -343,6 +349,19 @@ public sealed record class Params : JsonModel
             return this._rawData.GetNotNullClass<ApiEnum<string, Model>>("model");
         }
         init { this._rawData.Set("model", value); }
+    }
+
+    /// <summary>
+    /// Container identifier for reuse across requests.
+    /// </summary>
+    public string? Container
+    {
+        get
+        {
+            this._rawData.Freeze();
+            return this._rawData.GetNullableClass<string>("container");
+        }
+        init { this._rawData.Set("container", value); }
     }
 
     /// <summary>
@@ -715,7 +734,8 @@ public sealed record class Params : JsonModel
         {
             item.Validate();
         }
-        this.Model.Validate();
+        this.Model.Raw();
+        _ = this.Container;
         _ = this.InferenceGeo;
         this.Metadata?.Validate();
         this.OutputConfig?.Validate();
@@ -1002,6 +1022,16 @@ public record class ParamsSystem : ModelBase
                 "Data did not match any variant of ParamsSystem"
             );
         }
+        this.Switch(
+            (_) => { },
+            (textBlockParams) =>
+            {
+                foreach (var item in textBlockParams)
+                {
+                    item.Validate();
+                }
+            }
+        );
     }
 
     public virtual bool Equals(ParamsSystem? other) =>
@@ -1015,7 +1045,10 @@ public record class ParamsSystem : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
@@ -1055,6 +1088,10 @@ sealed class ParamsSystemConverter : JsonConverter<ParamsSystem>
             var deserialized = JsonSerializer.Deserialize<List<TextBlockParam>>(element, options);
             if (deserialized != null)
             {
+                foreach (var item in deserialized)
+                {
+                    item.Validate();
+                }
                 return new(deserialized, element);
             }
         }

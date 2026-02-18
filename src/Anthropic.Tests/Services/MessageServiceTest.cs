@@ -16,6 +16,7 @@ public class MessageServiceTest
     private static Message GenerateStartMessage =>
         new()
         {
+            Container = null,
             ID = "Test",
             Content = [],
             Model = Model.Claude3OpusLatest,

@@ -339,6 +339,16 @@ public record class BetaRequestMcpToolResultBlockParamContent : ModelBase
                 "Data did not match any variant of BetaRequestMcpToolResultBlockParamContent"
             );
         }
+        this.Switch(
+            (_) => { },
+            (betaMcpToolResultBlockParamContent) =>
+            {
+                foreach (var item in betaMcpToolResultBlockParamContent)
+                {
+                    item.Validate();
+                }
+            }
+        );
     }
 
     public virtual bool Equals(BetaRequestMcpToolResultBlockParamContent? other) =>
@@ -352,7 +362,10 @@ public record class BetaRequestMcpToolResultBlockParamContent : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
@@ -396,6 +409,10 @@ sealed class BetaRequestMcpToolResultBlockParamContentConverter
             );
             if (deserialized != null)
             {
+                foreach (var item in deserialized)
+                {
+                    item.Validate();
+                }
                 return new(deserialized, element);
             }
         }

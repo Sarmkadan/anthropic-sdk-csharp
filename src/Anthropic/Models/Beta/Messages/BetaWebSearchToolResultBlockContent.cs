@@ -196,7 +196,16 @@ public record class BetaWebSearchToolResultBlockContent : ModelBase
                 "Data did not match any variant of BetaWebSearchToolResultBlockContent"
             );
         }
-        this.Switch((error) => error.Validate(), (_) => { });
+        this.Switch(
+            (error) => error.Validate(),
+            (betaWebSearchResultBlocks) =>
+            {
+                foreach (var item in betaWebSearchResultBlocks)
+                {
+                    item.Validate();
+                }
+            }
+        );
     }
 
     public virtual bool Equals(BetaWebSearchToolResultBlockContent? other) =>
@@ -210,7 +219,10 @@ public record class BetaWebSearchToolResultBlockContent : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
@@ -258,6 +270,10 @@ sealed class BetaWebSearchToolResultBlockContentConverter
             );
             if (deserialized != null)
             {
+                foreach (var item in deserialized)
+                {
+                    item.Validate();
+                }
                 return new(deserialized, element);
             }
         }

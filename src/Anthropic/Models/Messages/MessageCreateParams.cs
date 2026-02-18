@@ -133,6 +133,19 @@ public record class MessageCreateParams : ParamsBase
     }
 
     /// <summary>
+    /// Container identifier for reuse across requests.
+    /// </summary>
+    public string? Container
+    {
+        get
+        {
+            this._rawBodyData.Freeze();
+            return this._rawBodyData.GetNullableClass<string>("container");
+        }
+        init { this._rawBodyData.Set("container", value); }
+    }
+
+    /// <summary>
     /// Specifies the geographic region for inference processing. If not specified,
     /// the workspace's `default_inference_geo` is used.
     /// </summary>
@@ -522,12 +535,18 @@ public record class MessageCreateParams : ParamsBase
 
     public override string ToString() =>
         JsonSerializer.Serialize(
-            new Dictionary<string, object?>()
-            {
-                ["HeaderData"] = this._rawHeaderData.Freeze(),
-                ["QueryData"] = this._rawQueryData.Freeze(),
-                ["BodyData"] = this._rawBodyData.Freeze(),
-            },
+            FriendlyJsonPrinter.PrintValue(
+                new Dictionary<string, JsonElement>()
+                {
+                    ["HeaderData"] = FriendlyJsonPrinter.PrintValue(
+                        JsonSerializer.SerializeToElement(this._rawHeaderData.Freeze())
+                    ),
+                    ["QueryData"] = FriendlyJsonPrinter.PrintValue(
+                        JsonSerializer.SerializeToElement(this._rawQueryData.Freeze())
+                    ),
+                    ["BodyData"] = FriendlyJsonPrinter.PrintValue(this._rawBodyData.Freeze()),
+                }
+            ),
             ModelBase.ToStringSerializerOptions
         );
 
@@ -810,6 +829,16 @@ public record class MessageCreateParamsSystem : ModelBase
                 "Data did not match any variant of MessageCreateParamsSystem"
             );
         }
+        this.Switch(
+            (_) => { },
+            (textBlockParams) =>
+            {
+                foreach (var item in textBlockParams)
+                {
+                    item.Validate();
+                }
+            }
+        );
     }
 
     public virtual bool Equals(MessageCreateParamsSystem? other) =>
@@ -823,7 +852,10 @@ public record class MessageCreateParamsSystem : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
@@ -863,6 +895,10 @@ sealed class MessageCreateParamsSystemConverter : JsonConverter<MessageCreatePar
             var deserialized = JsonSerializer.Deserialize<List<TextBlockParam>>(element, options);
             if (deserialized != null)
             {
+                foreach (var item in deserialized)
+                {
+                    item.Validate();
+                }
                 return new(deserialized, element);
             }
         }

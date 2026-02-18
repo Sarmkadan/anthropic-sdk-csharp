@@ -17,6 +17,7 @@ public class MessageCreateParamsTest : TestBase
             MaxTokens = 1024,
             Messages = [new() { Content = "Hello, world", Role = Messages::Role.User }],
             Model = Messages::Model.ClaudeOpus4_6,
+            Container = "container",
             InferenceGeo = "inference_geo",
             Metadata = new() { UserID = "13803d75-b4b5-4c3e-b2a2-6f21399b021b" },
             OutputConfig = new()
@@ -69,9 +70,18 @@ public class MessageCreateParamsTest : TestBase
                         Required = ["location"],
                     },
                     Name = "name",
+                    AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                     CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                    DeferLoading = true,
                     Description = "Get the current weather in a given location",
                     EagerInputStreaming = true,
+                    InputExamples =
+                    [
+                        new Dictionary<string, JsonElement>()
+                        {
+                            { "foo", JsonSerializer.SerializeToElement("bar") },
+                        },
+                    ],
                     Strict = true,
                     Type = Messages::Type.Custom,
                 },
@@ -86,6 +96,7 @@ public class MessageCreateParamsTest : TestBase
             new() { Content = "Hello, world", Role = Messages::Role.User },
         ];
         ApiEnum<string, Messages::Model> expectedModel = Messages::Model.ClaudeOpus4_6;
+        string expectedContainer = "container";
         string expectedInferenceGeo = "inference_geo";
         Messages::Metadata expectedMetadata = new()
         {
@@ -144,9 +155,18 @@ public class MessageCreateParamsTest : TestBase
                     Required = ["location"],
                 },
                 Name = "name",
+                AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                 CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                DeferLoading = true,
                 Description = "Get the current weather in a given location",
                 EagerInputStreaming = true,
+                InputExamples =
+                [
+                    new Dictionary<string, JsonElement>()
+                    {
+                        { "foo", JsonSerializer.SerializeToElement("bar") },
+                    },
+                ],
                 Strict = true,
                 Type = Messages::Type.Custom,
             },
@@ -161,6 +181,7 @@ public class MessageCreateParamsTest : TestBase
             Assert.Equal(expectedMessages[i], parameters.Messages[i]);
         }
         Assert.Equal(expectedModel, parameters.Model);
+        Assert.Equal(expectedContainer, parameters.Container);
         Assert.Equal(expectedInferenceGeo, parameters.InferenceGeo);
         Assert.Equal(expectedMetadata, parameters.Metadata);
         Assert.Equal(expectedOutputConfig, parameters.OutputConfig);
@@ -193,6 +214,7 @@ public class MessageCreateParamsTest : TestBase
             MaxTokens = 1024,
             Messages = [new() { Content = "Hello, world", Role = Messages::Role.User }],
             Model = Messages::Model.ClaudeOpus4_6,
+            Container = "container",
             InferenceGeo = "inference_geo",
         };
 
@@ -228,6 +250,7 @@ public class MessageCreateParamsTest : TestBase
             MaxTokens = 1024,
             Messages = [new() { Content = "Hello, world", Role = Messages::Role.User }],
             Model = Messages::Model.ClaudeOpus4_6,
+            Container = "container",
             InferenceGeo = "inference_geo",
 
             // Null should be interpreted as omitted for these properties
@@ -327,9 +350,18 @@ public class MessageCreateParamsTest : TestBase
                         Required = ["location"],
                     },
                     Name = "name",
+                    AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                     CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                    DeferLoading = true,
                     Description = "Get the current weather in a given location",
                     EagerInputStreaming = true,
+                    InputExamples =
+                    [
+                        new Dictionary<string, JsonElement>()
+                        {
+                            { "foo", JsonSerializer.SerializeToElement("bar") },
+                        },
+                    ],
                     Strict = true,
                     Type = Messages::Type.Custom,
                 },
@@ -338,6 +370,8 @@ public class MessageCreateParamsTest : TestBase
             TopP = 0.7,
         };
 
+        Assert.Null(parameters.Container);
+        Assert.False(parameters.RawBodyData.ContainsKey("container"));
         Assert.Null(parameters.InferenceGeo);
         Assert.False(parameters.RawBodyData.ContainsKey("inference_geo"));
     }
@@ -401,9 +435,18 @@ public class MessageCreateParamsTest : TestBase
                         Required = ["location"],
                     },
                     Name = "name",
+                    AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                     CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                    DeferLoading = true,
                     Description = "Get the current weather in a given location",
                     EagerInputStreaming = true,
+                    InputExamples =
+                    [
+                        new Dictionary<string, JsonElement>()
+                        {
+                            { "foo", JsonSerializer.SerializeToElement("bar") },
+                        },
+                    ],
                     Strict = true,
                     Type = Messages::Type.Custom,
                 },
@@ -411,9 +454,12 @@ public class MessageCreateParamsTest : TestBase
             TopK = 5,
             TopP = 0.7,
 
+            Container = null,
             InferenceGeo = null,
         };
 
+        Assert.Null(parameters.Container);
+        Assert.True(parameters.RawBodyData.ContainsKey("container"));
         Assert.Null(parameters.InferenceGeo);
         Assert.True(parameters.RawBodyData.ContainsKey("inference_geo"));
     }
@@ -441,6 +487,7 @@ public class MessageCreateParamsTest : TestBase
             MaxTokens = 1024,
             Messages = [new() { Content = "Hello, world", Role = Messages::Role.User }],
             Model = Messages::Model.ClaudeOpus4_6,
+            Container = "container",
             InferenceGeo = "inference_geo",
             Metadata = new() { UserID = "13803d75-b4b5-4c3e-b2a2-6f21399b021b" },
             OutputConfig = new()
@@ -493,9 +540,18 @@ public class MessageCreateParamsTest : TestBase
                         Required = ["location"],
                     },
                     Name = "name",
+                    AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                     CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                    DeferLoading = true,
                     Description = "Get the current weather in a given location",
                     EagerInputStreaming = true,
+                    InputExamples =
+                    [
+                        new Dictionary<string, JsonElement>()
+                        {
+                            { "foo", JsonSerializer.SerializeToElement("bar") },
+                        },
+                    ],
                     Strict = true,
                     Type = Messages::Type.Custom,
                 },
