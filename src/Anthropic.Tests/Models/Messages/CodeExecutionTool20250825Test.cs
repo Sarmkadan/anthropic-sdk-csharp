@@ -255,6 +255,7 @@ public class CodeExecutionTool20250825AllowedCallerTest : TestBase
     [Theory]
     [InlineData(CodeExecutionTool20250825AllowedCaller.Direct)]
     [InlineData(CodeExecutionTool20250825AllowedCaller.CodeExecution20250825)]
+    [InlineData(CodeExecutionTool20250825AllowedCaller.CodeExecution20260120)]
     public void Validation_Works(CodeExecutionTool20250825AllowedCaller rawValue)
     {
         // force implicit conversion because Theory can't do that for us
@@ -276,6 +277,7 @@ public class CodeExecutionTool20250825AllowedCallerTest : TestBase
     [Theory]
     [InlineData(CodeExecutionTool20250825AllowedCaller.Direct)]
     [InlineData(CodeExecutionTool20250825AllowedCaller.CodeExecution20250825)]
+    [InlineData(CodeExecutionTool20250825AllowedCaller.CodeExecution20260120)]
     public void SerializationRoundtrip_Works(CodeExecutionTool20250825AllowedCaller rawValue)
     {
         // force implicit conversion because Theory can't do that for us

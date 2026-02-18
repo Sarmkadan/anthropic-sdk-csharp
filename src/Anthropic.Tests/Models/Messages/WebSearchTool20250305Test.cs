@@ -41,7 +41,7 @@ public class WebSearchTool20250305Test : TestBase
         bool expectedDeferLoading = true;
         long expectedMaxUses = 1;
         bool expectedStrict = true;
-        WebSearchTool20250305UserLocation expectedUserLocation = new()
+        UserLocation expectedUserLocation = new()
         {
             City = "New York",
             Country = "US",
@@ -146,7 +146,7 @@ public class WebSearchTool20250305Test : TestBase
         bool expectedDeferLoading = true;
         long expectedMaxUses = 1;
         bool expectedStrict = true;
-        WebSearchTool20250305UserLocation expectedUserLocation = new()
+        UserLocation expectedUserLocation = new()
         {
             City = "New York",
             Country = "US",
@@ -423,6 +423,7 @@ public class WebSearchTool20250305AllowedCallerTest : TestBase
     [Theory]
     [InlineData(WebSearchTool20250305AllowedCaller.Direct)]
     [InlineData(WebSearchTool20250305AllowedCaller.CodeExecution20250825)]
+    [InlineData(WebSearchTool20250305AllowedCaller.CodeExecution20260120)]
     public void Validation_Works(WebSearchTool20250305AllowedCaller rawValue)
     {
         // force implicit conversion because Theory can't do that for us
@@ -445,6 +446,7 @@ public class WebSearchTool20250305AllowedCallerTest : TestBase
     [Theory]
     [InlineData(WebSearchTool20250305AllowedCaller.Direct)]
     [InlineData(WebSearchTool20250305AllowedCaller.CodeExecution20250825)]
+    [InlineData(WebSearchTool20250305AllowedCaller.CodeExecution20260120)]
     public void SerializationRoundtrip_Works(WebSearchTool20250305AllowedCaller rawValue)
     {
         // force implicit conversion because Theory can't do that for us
@@ -474,12 +476,12 @@ public class WebSearchTool20250305AllowedCallerTest : TestBase
     }
 }
 
-public class WebSearchTool20250305UserLocationTest : TestBase
+public class UserLocationTest : TestBase
 {
     [Fact]
     public void FieldRoundtrip_Works()
     {
-        var model = new WebSearchTool20250305UserLocation
+        var model = new UserLocation
         {
             City = "New York",
             Country = "US",
@@ -503,7 +505,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void SerializationRoundtrip_Works()
     {
-        var model = new WebSearchTool20250305UserLocation
+        var model = new UserLocation
         {
             City = "New York",
             Country = "US",
@@ -512,7 +514,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
         };
 
         string json = JsonSerializer.Serialize(model, ModelBase.SerializerOptions);
-        var deserialized = JsonSerializer.Deserialize<WebSearchTool20250305UserLocation>(
+        var deserialized = JsonSerializer.Deserialize<UserLocation>(
             json,
             ModelBase.SerializerOptions
         );
@@ -523,7 +525,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void FieldRoundtripThroughSerialization_Works()
     {
-        var model = new WebSearchTool20250305UserLocation
+        var model = new UserLocation
         {
             City = "New York",
             Country = "US",
@@ -532,7 +534,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
         };
 
         string element = JsonSerializer.Serialize(model, ModelBase.SerializerOptions);
-        var deserialized = JsonSerializer.Deserialize<WebSearchTool20250305UserLocation>(
+        var deserialized = JsonSerializer.Deserialize<UserLocation>(
             element,
             ModelBase.SerializerOptions
         );
@@ -554,7 +556,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void Validation_Works()
     {
-        var model = new WebSearchTool20250305UserLocation
+        var model = new UserLocation
         {
             City = "New York",
             Country = "US",
@@ -568,7 +570,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void OptionalNullablePropertiesUnsetAreNotSet_Works()
     {
-        var model = new WebSearchTool20250305UserLocation { };
+        var model = new UserLocation { };
 
         Assert.Null(model.City);
         Assert.False(model.RawData.ContainsKey("city"));
@@ -583,7 +585,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void OptionalNullablePropertiesUnsetValidation_Works()
     {
-        var model = new WebSearchTool20250305UserLocation { };
+        var model = new UserLocation { };
 
         model.Validate();
     }
@@ -591,7 +593,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void OptionalNullablePropertiesSetToNullAreSetToNull_Works()
     {
-        var model = new WebSearchTool20250305UserLocation
+        var model = new UserLocation
         {
             City = null,
             Country = null,
@@ -612,7 +614,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void OptionalNullablePropertiesSetToNullValidation_Works()
     {
-        var model = new WebSearchTool20250305UserLocation
+        var model = new UserLocation
         {
             City = null,
             Country = null,
@@ -626,7 +628,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
     [Fact]
     public void CopyConstructor_Works()
     {
-        var model = new WebSearchTool20250305UserLocation
+        var model = new UserLocation
         {
             City = "New York",
             Country = "US",
@@ -634,7 +636,7 @@ public class WebSearchTool20250305UserLocationTest : TestBase
             Timezone = "America/New_York",
         };
 
-        WebSearchTool20250305UserLocation copied = new(model);
+        UserLocation copied = new(model);
 
         Assert.Equal(model, copied);
     }
