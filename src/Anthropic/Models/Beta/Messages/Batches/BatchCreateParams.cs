@@ -133,12 +133,18 @@ public record class BatchCreateParams : ParamsBase
 
     public override string ToString() =>
         JsonSerializer.Serialize(
-            new Dictionary<string, object?>()
-            {
-                ["HeaderData"] = this._rawHeaderData.Freeze(),
-                ["QueryData"] = this._rawQueryData.Freeze(),
-                ["BodyData"] = this._rawBodyData.Freeze(),
-            },
+            FriendlyJsonPrinter.PrintValue(
+                new Dictionary<string, JsonElement>()
+                {
+                    ["HeaderData"] = FriendlyJsonPrinter.PrintValue(
+                        JsonSerializer.SerializeToElement(this._rawHeaderData.Freeze())
+                    ),
+                    ["QueryData"] = FriendlyJsonPrinter.PrintValue(
+                        JsonSerializer.SerializeToElement(this._rawQueryData.Freeze())
+                    ),
+                    ["BodyData"] = FriendlyJsonPrinter.PrintValue(this._rawBodyData.Freeze()),
+                }
+            ),
             ModelBase.ToStringSerializerOptions
         );
 
@@ -377,12 +383,14 @@ public sealed record class Params : JsonModel
     /// <summary>
     /// Container identifier for reuse across requests.
     /// </summary>
-    public Container? Container
+    public global::Anthropic.Models.Beta.Messages.Batches.Container? Container
     {
         get
         {
             this._rawData.Freeze();
-            return this._rawData.GetNullableClass<Container>("container");
+            return this._rawData.GetNullableClass<global::Anthropic.Models.Beta.Messages.Batches.Container>(
+                "container"
+            );
         }
         init { this._rawData.Set("container", value); }
     }
@@ -833,7 +841,7 @@ public sealed record class Params : JsonModel
         {
             item.Validate();
         }
-        this.Model.Validate();
+        this.Model.Raw();
         this.Container?.Validate();
         this.ContextManagement?.Validate();
         _ = this.InferenceGeo;
@@ -1051,9 +1059,13 @@ public record class Container : ModelBase
         };
     }
 
-    public static implicit operator Container(BetaContainerParams value) => new(value);
+    public static implicit operator global::Anthropic.Models.Beta.Messages.Batches.Container(
+        BetaContainerParams value
+    ) => new(value);
 
-    public static implicit operator Container(string value) => new(value);
+    public static implicit operator global::Anthropic.Models.Beta.Messages.Batches.Container(
+        string value
+    ) => new(value);
 
     /// <summary>
     /// Validates that the instance was constructed with a known variant and that this variant is valid
@@ -1074,7 +1086,7 @@ public record class Container : ModelBase
         this.Switch((betaContainerParams) => betaContainerParams.Validate(), (_) => { });
     }
 
-    public virtual bool Equals(Container? other) =>
+    public virtual bool Equals(global::Anthropic.Models.Beta.Messages.Batches.Container? other) =>
         other != null
         && this.VariantIndex() == other.VariantIndex()
         && JsonElement.DeepEquals(this.Json, other.Json);
@@ -1085,7 +1097,10 @@ public record class Container : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
@@ -1098,9 +1113,10 @@ public record class Container : ModelBase
     }
 }
 
-sealed class ContainerConverter : JsonConverter<Container?>
+sealed class ContainerConverter
+    : JsonConverter<global::Anthropic.Models.Beta.Messages.Batches.Container?>
 {
-    public override Container? Read(
+    public override global::Anthropic.Models.Beta.Messages.Batches.Container? Read(
         ref Utf8JsonReader reader,
         System::Type typeToConvert,
         JsonSerializerOptions options
@@ -1139,7 +1155,7 @@ sealed class ContainerConverter : JsonConverter<Container?>
 
     public override void Write(
         Utf8JsonWriter writer,
-        Container? value,
+        global::Anthropic.Models.Beta.Messages.Batches.Container? value,
         JsonSerializerOptions options
     )
     {
@@ -1433,6 +1449,16 @@ public record class ParamsSystem : ModelBase
                 "Data did not match any variant of ParamsSystem"
             );
         }
+        this.Switch(
+            (_) => { },
+            (betaTextBlockParams) =>
+            {
+                foreach (var item in betaTextBlockParams)
+                {
+                    item.Validate();
+                }
+            }
+        );
     }
 
     public virtual bool Equals(ParamsSystem? other) =>
@@ -1446,7 +1472,10 @@ public record class ParamsSystem : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
@@ -1489,6 +1518,10 @@ sealed class ParamsSystemConverter : JsonConverter<ParamsSystem>
             );
             if (deserialized != null)
             {
+                foreach (var item in deserialized)
+                {
+                    item.Validate();
+                }
                 return new(deserialized, element);
             }
         }

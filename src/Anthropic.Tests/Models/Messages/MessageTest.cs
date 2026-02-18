@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using Anthropic.Core;
@@ -13,6 +14,11 @@ public class MessageTest : TestBase
         var model = new Message
         {
             ID = "msg_013Zva2CMHLNnXjNJJKqJ2EF",
+            Container = new()
+            {
+                ID = "id",
+                ExpiresAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
+            },
             Content =
             [
                 new TextBlock()
@@ -43,12 +49,17 @@ public class MessageTest : TestBase
                 InferenceGeo = "inference_geo",
                 InputTokens = 2095,
                 OutputTokens = 503,
-                ServerToolUse = new(0),
+                ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
                 ServiceTier = UsageServiceTier.Standard,
             },
         };
 
         string expectedID = "msg_013Zva2CMHLNnXjNJJKqJ2EF";
+        Container expectedContainer = new()
+        {
+            ID = "id",
+            ExpiresAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
+        };
         List<ContentBlock> expectedContent =
         [
             new TextBlock()
@@ -80,11 +91,12 @@ public class MessageTest : TestBase
             InferenceGeo = "inference_geo",
             InputTokens = 2095,
             OutputTokens = 503,
-            ServerToolUse = new(0),
+            ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
             ServiceTier = UsageServiceTier.Standard,
         };
 
         Assert.Equal(expectedID, model.ID);
+        Assert.Equal(expectedContainer, model.Container);
         Assert.Equal(expectedContent.Count, model.Content.Count);
         for (int i = 0; i < expectedContent.Count; i++)
         {
@@ -104,6 +116,11 @@ public class MessageTest : TestBase
         var model = new Message
         {
             ID = "msg_013Zva2CMHLNnXjNJJKqJ2EF",
+            Container = new()
+            {
+                ID = "id",
+                ExpiresAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
+            },
             Content =
             [
                 new TextBlock()
@@ -134,7 +151,7 @@ public class MessageTest : TestBase
                 InferenceGeo = "inference_geo",
                 InputTokens = 2095,
                 OutputTokens = 503,
-                ServerToolUse = new(0),
+                ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
                 ServiceTier = UsageServiceTier.Standard,
             },
         };
@@ -151,6 +168,11 @@ public class MessageTest : TestBase
         var model = new Message
         {
             ID = "msg_013Zva2CMHLNnXjNJJKqJ2EF",
+            Container = new()
+            {
+                ID = "id",
+                ExpiresAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
+            },
             Content =
             [
                 new TextBlock()
@@ -181,7 +203,7 @@ public class MessageTest : TestBase
                 InferenceGeo = "inference_geo",
                 InputTokens = 2095,
                 OutputTokens = 503,
-                ServerToolUse = new(0),
+                ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
                 ServiceTier = UsageServiceTier.Standard,
             },
         };
@@ -194,6 +216,11 @@ public class MessageTest : TestBase
         Assert.NotNull(deserialized);
 
         string expectedID = "msg_013Zva2CMHLNnXjNJJKqJ2EF";
+        Container expectedContainer = new()
+        {
+            ID = "id",
+            ExpiresAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
+        };
         List<ContentBlock> expectedContent =
         [
             new TextBlock()
@@ -225,11 +252,12 @@ public class MessageTest : TestBase
             InferenceGeo = "inference_geo",
             InputTokens = 2095,
             OutputTokens = 503,
-            ServerToolUse = new(0),
+            ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
             ServiceTier = UsageServiceTier.Standard,
         };
 
         Assert.Equal(expectedID, deserialized.ID);
+        Assert.Equal(expectedContainer, deserialized.Container);
         Assert.Equal(expectedContent.Count, deserialized.Content.Count);
         for (int i = 0; i < expectedContent.Count; i++)
         {
@@ -249,6 +277,11 @@ public class MessageTest : TestBase
         var model = new Message
         {
             ID = "msg_013Zva2CMHLNnXjNJJKqJ2EF",
+            Container = new()
+            {
+                ID = "id",
+                ExpiresAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
+            },
             Content =
             [
                 new TextBlock()
@@ -279,7 +312,7 @@ public class MessageTest : TestBase
                 InferenceGeo = "inference_geo",
                 InputTokens = 2095,
                 OutputTokens = 503,
-                ServerToolUse = new(0),
+                ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
                 ServiceTier = UsageServiceTier.Standard,
             },
         };
@@ -293,6 +326,11 @@ public class MessageTest : TestBase
         var model = new Message
         {
             ID = "msg_013Zva2CMHLNnXjNJJKqJ2EF",
+            Container = new()
+            {
+                ID = "id",
+                ExpiresAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
+            },
             Content =
             [
                 new TextBlock()
@@ -323,7 +361,7 @@ public class MessageTest : TestBase
                 InferenceGeo = "inference_geo",
                 InputTokens = 2095,
                 OutputTokens = 503,
-                ServerToolUse = new(0),
+                ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
                 ServiceTier = UsageServiceTier.Standard,
             },
         };

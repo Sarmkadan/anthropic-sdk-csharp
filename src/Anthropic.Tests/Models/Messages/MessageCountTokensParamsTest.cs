@@ -62,9 +62,18 @@ public class MessageCountTokensParamsTest : TestBase
                         Required = ["location"],
                     },
                     Name = "name",
+                    AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                     CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                    DeferLoading = true,
                     Description = "Get the current weather in a given location",
                     EagerInputStreaming = true,
+                    InputExamples =
+                    [
+                        new Dictionary<string, JsonElement>()
+                        {
+                            { "foo", JsonSerializer.SerializeToElement("bar") },
+                        },
+                    ],
                     Strict = true,
                     Type = Messages::Type.Custom,
                 },
@@ -126,9 +135,18 @@ public class MessageCountTokensParamsTest : TestBase
                     Required = ["location"],
                 },
                 Name = "name",
+                AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                 CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                DeferLoading = true,
                 Description = "Get the current weather in a given location",
                 EagerInputStreaming = true,
+                InputExamples =
+                [
+                    new Dictionary<string, JsonElement>()
+                    {
+                        { "foo", JsonSerializer.SerializeToElement("bar") },
+                    },
+                ],
                 Strict = true,
                 Type = Messages::Type.Custom,
             },
@@ -269,9 +287,18 @@ public class MessageCountTokensParamsTest : TestBase
                         Required = ["location"],
                     },
                     Name = "name",
+                    AllowedCallers = [Messages::ToolAllowedCaller.Direct],
                     CacheControl = new() { Ttl = Messages::Ttl.Ttl5m },
+                    DeferLoading = true,
                     Description = "Get the current weather in a given location",
                     EagerInputStreaming = true,
+                    InputExamples =
+                    [
+                        new Dictionary<string, JsonElement>()
+                        {
+                            { "foo", JsonSerializer.SerializeToElement("bar") },
+                        },
+                    ],
                     Strict = true,
                     Type = Messages::Type.Custom,
                 },

@@ -18,7 +18,7 @@ public class UsageTest : TestBase
             InferenceGeo = "inference_geo",
             InputTokens = 2095,
             OutputTokens = 503,
-            ServerToolUse = new(0),
+            ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
             ServiceTier = UsageServiceTier.Standard,
         };
 
@@ -32,7 +32,11 @@ public class UsageTest : TestBase
         string expectedInferenceGeo = "inference_geo";
         long expectedInputTokens = 2095;
         long expectedOutputTokens = 503;
-        ServerToolUsage expectedServerToolUse = new(0);
+        ServerToolUsage expectedServerToolUse = new()
+        {
+            WebFetchRequests = 2,
+            WebSearchRequests = 0,
+        };
         ApiEnum<string, UsageServiceTier> expectedServiceTier = UsageServiceTier.Standard;
 
         Assert.Equal(expectedCacheCreation, model.CacheCreation);
@@ -56,7 +60,7 @@ public class UsageTest : TestBase
             InferenceGeo = "inference_geo",
             InputTokens = 2095,
             OutputTokens = 503,
-            ServerToolUse = new(0),
+            ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
             ServiceTier = UsageServiceTier.Standard,
         };
 
@@ -77,7 +81,7 @@ public class UsageTest : TestBase
             InferenceGeo = "inference_geo",
             InputTokens = 2095,
             OutputTokens = 503,
-            ServerToolUse = new(0),
+            ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
             ServiceTier = UsageServiceTier.Standard,
         };
 
@@ -95,7 +99,11 @@ public class UsageTest : TestBase
         string expectedInferenceGeo = "inference_geo";
         long expectedInputTokens = 2095;
         long expectedOutputTokens = 503;
-        ServerToolUsage expectedServerToolUse = new(0);
+        ServerToolUsage expectedServerToolUse = new()
+        {
+            WebFetchRequests = 2,
+            WebSearchRequests = 0,
+        };
         ApiEnum<string, UsageServiceTier> expectedServiceTier = UsageServiceTier.Standard;
 
         Assert.Equal(expectedCacheCreation, deserialized.CacheCreation);
@@ -119,7 +127,7 @@ public class UsageTest : TestBase
             InferenceGeo = "inference_geo",
             InputTokens = 2095,
             OutputTokens = 503,
-            ServerToolUse = new(0),
+            ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
             ServiceTier = UsageServiceTier.Standard,
         };
 
@@ -137,7 +145,7 @@ public class UsageTest : TestBase
             InferenceGeo = "inference_geo",
             InputTokens = 2095,
             OutputTokens = 503,
-            ServerToolUse = new(0),
+            ServerToolUse = new() { WebFetchRequests = 2, WebSearchRequests = 0 },
             ServiceTier = UsageServiceTier.Standard,
         };
 

@@ -317,6 +317,16 @@ public record class BetaToolResultBlockParamContent : ModelBase
                 "Data did not match any variant of BetaToolResultBlockParamContent"
             );
         }
+        this.Switch(
+            (_) => { },
+            (blocks) =>
+            {
+                foreach (var item in blocks)
+                {
+                    item.Validate();
+                }
+            }
+        );
     }
 
     public virtual bool Equals(BetaToolResultBlockParamContent? other) =>
@@ -330,7 +340,10 @@ public record class BetaToolResultBlockParamContent : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
@@ -371,6 +384,10 @@ sealed class BetaToolResultBlockParamContentConverter
             var deserialized = JsonSerializer.Deserialize<List<Block>>(element, options);
             if (deserialized != null)
             {
+                foreach (var item in deserialized)
+                {
+                    item.Validate();
+                }
                 return new(deserialized, element);
             }
         }
@@ -741,7 +758,10 @@ public record class Block : ModelBase
     }
 
     public override string ToString() =>
-        JsonSerializer.Serialize(this._element, ModelBase.ToStringSerializerOptions);
+        JsonSerializer.Serialize(
+            FriendlyJsonPrinter.PrintValue(this.Json),
+            ModelBase.ToStringSerializerOptions
+        );
 
     int VariantIndex()
     {
