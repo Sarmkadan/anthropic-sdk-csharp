@@ -276,6 +276,7 @@ public enum BetaWebFetchTool20250910AllowedCaller
 {
     Direct,
     CodeExecution20250825,
+    CodeExecution20260120,
 }
 
 sealed class BetaWebFetchTool20250910AllowedCallerConverter
@@ -292,6 +293,8 @@ sealed class BetaWebFetchTool20250910AllowedCallerConverter
             "direct" => BetaWebFetchTool20250910AllowedCaller.Direct,
             "code_execution_20250825" =>
                 BetaWebFetchTool20250910AllowedCaller.CodeExecution20250825,
+            "code_execution_20260120" =>
+                BetaWebFetchTool20250910AllowedCaller.CodeExecution20260120,
             _ => (BetaWebFetchTool20250910AllowedCaller)(-1),
         };
     }
@@ -309,6 +312,8 @@ sealed class BetaWebFetchTool20250910AllowedCallerConverter
                 BetaWebFetchTool20250910AllowedCaller.Direct => "direct",
                 BetaWebFetchTool20250910AllowedCaller.CodeExecution20250825 =>
                     "code_execution_20250825",
+                BetaWebFetchTool20250910AllowedCaller.CodeExecution20260120 =>
+                    "code_execution_20260120",
                 _ => throw new AnthropicInvalidDataException(
                     string.Format("Invalid value '{0}' in {1}", value, nameof(value))
                 ),
