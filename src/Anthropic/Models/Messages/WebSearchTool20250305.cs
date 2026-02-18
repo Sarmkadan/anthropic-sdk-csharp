@@ -172,14 +172,12 @@ public sealed record class WebSearchTool20250305 : JsonModel
     /// <summary>
     /// Parameters for the user's location. Used to provide more relevant search results.
     /// </summary>
-    public WebSearchTool20250305UserLocation? UserLocation
+    public UserLocation? UserLocation
     {
         get
         {
             this._rawData.Freeze();
-            return this._rawData.GetNullableClass<WebSearchTool20250305UserLocation>(
-                "user_location"
-            );
+            return this._rawData.GetNullableClass<UserLocation>("user_location");
         }
         init { this._rawData.Set("user_location", value); }
     }
@@ -263,6 +261,7 @@ public enum WebSearchTool20250305AllowedCaller
 {
     Direct,
     CodeExecution20250825,
+    CodeExecution20260120,
 }
 
 sealed class WebSearchTool20250305AllowedCallerConverter
@@ -278,6 +277,7 @@ sealed class WebSearchTool20250305AllowedCallerConverter
         {
             "direct" => WebSearchTool20250305AllowedCaller.Direct,
             "code_execution_20250825" => WebSearchTool20250305AllowedCaller.CodeExecution20250825,
+            "code_execution_20260120" => WebSearchTool20250305AllowedCaller.CodeExecution20260120,
             _ => (WebSearchTool20250305AllowedCaller)(-1),
         };
     }
@@ -295,6 +295,8 @@ sealed class WebSearchTool20250305AllowedCallerConverter
                 WebSearchTool20250305AllowedCaller.Direct => "direct",
                 WebSearchTool20250305AllowedCaller.CodeExecution20250825 =>
                     "code_execution_20250825",
+                WebSearchTool20250305AllowedCaller.CodeExecution20260120 =>
+                    "code_execution_20260120",
                 _ => throw new AnthropicInvalidDataException(
                     string.Format("Invalid value '{0}' in {1}", value, nameof(value))
                 ),
@@ -302,136 +304,4 @@ sealed class WebSearchTool20250305AllowedCallerConverter
             options
         );
     }
-}
-
-/// <summary>
-/// Parameters for the user's location. Used to provide more relevant search results.
-/// </summary>
-[JsonConverter(
-    typeof(JsonModelConverter<
-        WebSearchTool20250305UserLocation,
-        WebSearchTool20250305UserLocationFromRaw
-    >)
-)]
-public sealed record class WebSearchTool20250305UserLocation : JsonModel
-{
-    public JsonElement Type
-    {
-        get
-        {
-            this._rawData.Freeze();
-            return this._rawData.GetNotNullStruct<JsonElement>("type");
-        }
-        init { this._rawData.Set("type", value); }
-    }
-
-    /// <summary>
-    /// The city of the user.
-    /// </summary>
-    public string? City
-    {
-        get
-        {
-            this._rawData.Freeze();
-            return this._rawData.GetNullableClass<string>("city");
-        }
-        init { this._rawData.Set("city", value); }
-    }
-
-    /// <summary>
-    /// The two letter [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-    /// of the user.
-    /// </summary>
-    public string? Country
-    {
-        get
-        {
-            this._rawData.Freeze();
-            return this._rawData.GetNullableClass<string>("country");
-        }
-        init { this._rawData.Set("country", value); }
-    }
-
-    /// <summary>
-    /// The region of the user.
-    /// </summary>
-    public string? Region
-    {
-        get
-        {
-            this._rawData.Freeze();
-            return this._rawData.GetNullableClass<string>("region");
-        }
-        init { this._rawData.Set("region", value); }
-    }
-
-    /// <summary>
-    /// The [IANA timezone](https://nodatime.org/TimeZones) of the user.
-    /// </summary>
-    public string? Timezone
-    {
-        get
-        {
-            this._rawData.Freeze();
-            return this._rawData.GetNullableClass<string>("timezone");
-        }
-        init { this._rawData.Set("timezone", value); }
-    }
-
-    /// <inheritdoc/>
-    public override void Validate()
-    {
-        if (!JsonElement.DeepEquals(this.Type, JsonSerializer.SerializeToElement("approximate")))
-        {
-            throw new AnthropicInvalidDataException("Invalid value given for constant");
-        }
-        _ = this.City;
-        _ = this.Country;
-        _ = this.Region;
-        _ = this.Timezone;
-    }
-
-    public WebSearchTool20250305UserLocation()
-    {
-        this.Type = JsonSerializer.SerializeToElement("approximate");
-    }
-
-#pragma warning disable CS8618
-    [SetsRequiredMembers]
-    public WebSearchTool20250305UserLocation(
-        WebSearchTool20250305UserLocation webSearchTool20250305UserLocation
-    )
-        : base(webSearchTool20250305UserLocation) { }
-#pragma warning restore CS8618
-
-    public WebSearchTool20250305UserLocation(IReadOnlyDictionary<string, JsonElement> rawData)
-    {
-        this._rawData = new(rawData);
-
-        this.Type = JsonSerializer.SerializeToElement("approximate");
-    }
-
-#pragma warning disable CS8618
-    [SetsRequiredMembers]
-    WebSearchTool20250305UserLocation(FrozenDictionary<string, JsonElement> rawData)
-    {
-        this._rawData = new(rawData);
-    }
-#pragma warning restore CS8618
-
-    /// <inheritdoc cref="WebSearchTool20250305UserLocationFromRaw.FromRawUnchecked"/>
-    public static WebSearchTool20250305UserLocation FromRawUnchecked(
-        IReadOnlyDictionary<string, JsonElement> rawData
-    )
-    {
-        return new(FrozenDictionary.ToFrozenDictionary(rawData));
-    }
-}
-
-class WebSearchTool20250305UserLocationFromRaw : IFromRawJson<WebSearchTool20250305UserLocation>
-{
-    /// <inheritdoc/>
-    public WebSearchTool20250305UserLocation FromRawUnchecked(
-        IReadOnlyDictionary<string, JsonElement> rawData
-    ) => WebSearchTool20250305UserLocation.FromRawUnchecked(rawData);
 }
