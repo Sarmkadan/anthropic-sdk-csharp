@@ -40,14 +40,16 @@ public sealed record class BetaCodeExecutionTool20250522 : JsonModel
         init { this._rawData.Set("type", value); }
     }
 
-    public IReadOnlyList<ApiEnum<string, AllowedCaller>>? AllowedCallers
+    public IReadOnlyList<
+        ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>
+    >? AllowedCallers
     {
         get
         {
             this._rawData.Freeze();
-            return this._rawData.GetNullableStruct<ImmutableArray<ApiEnum<string, AllowedCaller>>>(
-                "allowed_callers"
-            );
+            return this._rawData.GetNullableStruct<
+                ImmutableArray<ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>>
+            >("allowed_callers");
         }
         init
         {
@@ -56,10 +58,9 @@ public sealed record class BetaCodeExecutionTool20250522 : JsonModel
                 return;
             }
 
-            this._rawData.Set<ImmutableArray<ApiEnum<string, AllowedCaller>>?>(
-                "allowed_callers",
-                value == null ? null : ImmutableArray.ToImmutableArray(value)
-            );
+            this._rawData.Set<ImmutableArray<
+                ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>
+            >?>("allowed_callers", value == null ? null : ImmutableArray.ToImmutableArray(value));
         }
     }
 
@@ -198,17 +199,18 @@ class BetaCodeExecutionTool20250522FromRaw : IFromRawJson<BetaCodeExecutionTool2
 /// The tool can be called from the code execution environment (v1).     code_execution_20260120:
 /// The tool can be called from the code execution environment (v2 with persistence).</para>
 /// </summary>
-[JsonConverter(typeof(AllowedCallerConverter))]
-public enum AllowedCaller
+[JsonConverter(typeof(BetaCodeExecutionTool20250522AllowedCallerConverter))]
+public enum BetaCodeExecutionTool20250522AllowedCaller
 {
     Direct,
     CodeExecution20250825,
     CodeExecution20260120,
 }
 
-sealed class AllowedCallerConverter : JsonConverter<AllowedCaller>
+sealed class BetaCodeExecutionTool20250522AllowedCallerConverter
+    : JsonConverter<BetaCodeExecutionTool20250522AllowedCaller>
 {
-    public override AllowedCaller Read(
+    public override BetaCodeExecutionTool20250522AllowedCaller Read(
         ref Utf8JsonReader reader,
         System::Type typeToConvert,
         JsonSerializerOptions options
@@ -216,16 +218,18 @@ sealed class AllowedCallerConverter : JsonConverter<AllowedCaller>
     {
         return JsonSerializer.Deserialize<string>(ref reader, options) switch
         {
-            "direct" => AllowedCaller.Direct,
-            "code_execution_20250825" => AllowedCaller.CodeExecution20250825,
-            "code_execution_20260120" => AllowedCaller.CodeExecution20260120,
-            _ => (AllowedCaller)(-1),
+            "direct" => BetaCodeExecutionTool20250522AllowedCaller.Direct,
+            "code_execution_20250825" =>
+                BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20250825,
+            "code_execution_20260120" =>
+                BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20260120,
+            _ => (BetaCodeExecutionTool20250522AllowedCaller)(-1),
         };
     }
 
     public override void Write(
         Utf8JsonWriter writer,
-        AllowedCaller value,
+        BetaCodeExecutionTool20250522AllowedCaller value,
         JsonSerializerOptions options
     )
     {
@@ -233,9 +237,11 @@ sealed class AllowedCallerConverter : JsonConverter<AllowedCaller>
             writer,
             value switch
             {
-                AllowedCaller.Direct => "direct",
-                AllowedCaller.CodeExecution20250825 => "code_execution_20250825",
-                AllowedCaller.CodeExecution20260120 => "code_execution_20260120",
+                BetaCodeExecutionTool20250522AllowedCaller.Direct => "direct",
+                BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20250825 =>
+                    "code_execution_20250825",
+                BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20260120 =>
+                    "code_execution_20260120",
                 _ => throw new AnthropicInvalidDataException(
                     string.Format("Invalid value '{0}' in {1}", value, nameof(value))
                 ),

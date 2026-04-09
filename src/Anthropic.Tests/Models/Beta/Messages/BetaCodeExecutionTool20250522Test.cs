@@ -13,7 +13,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             CacheControl = new() { Ttl = Ttl.Ttl5m },
             DeferLoading = true,
             Strict = true,
@@ -21,7 +21,10 @@ public class BetaCodeExecutionTool20250522Test : TestBase
 
         JsonElement expectedName = JsonSerializer.SerializeToElement("code_execution");
         JsonElement expectedType = JsonSerializer.SerializeToElement("code_execution_20250522");
-        List<ApiEnum<string, AllowedCaller>> expectedAllowedCallers = [AllowedCaller.Direct];
+        List<ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>> expectedAllowedCallers =
+        [
+            BetaCodeExecutionTool20250522AllowedCaller.Direct,
+        ];
         BetaCacheControlEphemeral expectedCacheControl = new() { Ttl = Ttl.Ttl5m };
         bool expectedDeferLoading = true;
         bool expectedStrict = true;
@@ -44,7 +47,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             CacheControl = new() { Ttl = Ttl.Ttl5m },
             DeferLoading = true,
             Strict = true,
@@ -64,7 +67,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             CacheControl = new() { Ttl = Ttl.Ttl5m },
             DeferLoading = true,
             Strict = true,
@@ -79,7 +82,10 @@ public class BetaCodeExecutionTool20250522Test : TestBase
 
         JsonElement expectedName = JsonSerializer.SerializeToElement("code_execution");
         JsonElement expectedType = JsonSerializer.SerializeToElement("code_execution_20250522");
-        List<ApiEnum<string, AllowedCaller>> expectedAllowedCallers = [AllowedCaller.Direct];
+        List<ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>> expectedAllowedCallers =
+        [
+            BetaCodeExecutionTool20250522AllowedCaller.Direct,
+        ];
         BetaCacheControlEphemeral expectedCacheControl = new() { Ttl = Ttl.Ttl5m };
         bool expectedDeferLoading = true;
         bool expectedStrict = true;
@@ -102,7 +108,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             CacheControl = new() { Ttl = Ttl.Ttl5m },
             DeferLoading = true,
             Strict = true,
@@ -174,7 +180,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             DeferLoading = true,
             Strict = true,
         };
@@ -188,7 +194,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             DeferLoading = true,
             Strict = true,
         };
@@ -201,7 +207,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             DeferLoading = true,
             Strict = true,
 
@@ -217,7 +223,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             DeferLoading = true,
             Strict = true,
 
@@ -232,7 +238,7 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     {
         var model = new BetaCodeExecutionTool20250522
         {
-            AllowedCallers = [AllowedCaller.Direct],
+            AllowedCallers = [BetaCodeExecutionTool20250522AllowedCaller.Direct],
             CacheControl = new() { Ttl = Ttl.Ttl5m },
             DeferLoading = true,
             Strict = true,
@@ -244,45 +250,43 @@ public class BetaCodeExecutionTool20250522Test : TestBase
     }
 }
 
-public class AllowedCallerTest : TestBase
+public class BetaCodeExecutionTool20250522AllowedCallerTest : TestBase
 {
     [Theory]
-    [InlineData(AllowedCaller.Direct)]
-    [InlineData(AllowedCaller.CodeExecution20250825)]
-    [InlineData(AllowedCaller.CodeExecution20260120)]
-    public void Validation_Works(AllowedCaller rawValue)
+    [InlineData(BetaCodeExecutionTool20250522AllowedCaller.Direct)]
+    [InlineData(BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20250825)]
+    [InlineData(BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20260120)]
+    public void Validation_Works(BetaCodeExecutionTool20250522AllowedCaller rawValue)
     {
         // force implicit conversion because Theory can't do that for us
-        ApiEnum<string, AllowedCaller> value = rawValue;
+        ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller> value = rawValue;
         value.Validate();
     }
 
     [Fact]
     public void InvalidEnumValidationThrows_Works()
     {
-        var value = JsonSerializer.Deserialize<ApiEnum<string, AllowedCaller>>(
-            JsonSerializer.SerializeToElement("invalid value"),
-            ModelBase.SerializerOptions
-        );
+        var value = JsonSerializer.Deserialize<
+            ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>
+        >(JsonSerializer.SerializeToElement("invalid value"), ModelBase.SerializerOptions);
 
         Assert.NotNull(value);
         Assert.Throws<AnthropicInvalidDataException>(() => value.Validate());
     }
 
     [Theory]
-    [InlineData(AllowedCaller.Direct)]
-    [InlineData(AllowedCaller.CodeExecution20250825)]
-    [InlineData(AllowedCaller.CodeExecution20260120)]
-    public void SerializationRoundtrip_Works(AllowedCaller rawValue)
+    [InlineData(BetaCodeExecutionTool20250522AllowedCaller.Direct)]
+    [InlineData(BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20250825)]
+    [InlineData(BetaCodeExecutionTool20250522AllowedCaller.CodeExecution20260120)]
+    public void SerializationRoundtrip_Works(BetaCodeExecutionTool20250522AllowedCaller rawValue)
     {
         // force implicit conversion because Theory can't do that for us
-        ApiEnum<string, AllowedCaller> value = rawValue;
+        ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller> value = rawValue;
 
         string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
-        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, AllowedCaller>>(
-            json,
-            ModelBase.SerializerOptions
-        );
+        var deserialized = JsonSerializer.Deserialize<
+            ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>
+        >(json, ModelBase.SerializerOptions);
 
         Assert.Equal(value, deserialized);
     }
@@ -290,15 +294,13 @@ public class AllowedCallerTest : TestBase
     [Fact]
     public void InvalidEnumSerializationRoundtrip_Works()
     {
-        var value = JsonSerializer.Deserialize<ApiEnum<string, AllowedCaller>>(
-            JsonSerializer.SerializeToElement("invalid value"),
-            ModelBase.SerializerOptions
-        );
+        var value = JsonSerializer.Deserialize<
+            ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>
+        >(JsonSerializer.SerializeToElement("invalid value"), ModelBase.SerializerOptions);
         string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
-        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, AllowedCaller>>(
-            json,
-            ModelBase.SerializerOptions
-        );
+        var deserialized = JsonSerializer.Deserialize<
+            ApiEnum<string, BetaCodeExecutionTool20250522AllowedCaller>
+        >(json, ModelBase.SerializerOptions);
 
         Assert.Equal(value, deserialized);
     }

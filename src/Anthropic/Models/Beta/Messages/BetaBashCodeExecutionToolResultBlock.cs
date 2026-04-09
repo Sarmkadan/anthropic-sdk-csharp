@@ -17,12 +17,14 @@ namespace Anthropic.Models.Beta.Messages;
 )]
 public sealed record class BetaBashCodeExecutionToolResultBlock : JsonModel
 {
-    public required Content Content
+    public required BetaBashCodeExecutionToolResultBlockContent Content
     {
         get
         {
             this._rawData.Freeze();
-            return this._rawData.GetNotNullClass<Content>("content");
+            return this._rawData.GetNotNullClass<BetaBashCodeExecutionToolResultBlockContent>(
+                "content"
+            );
         }
         init { this._rawData.Set("content", value); }
     }
@@ -109,8 +111,8 @@ class BetaBashCodeExecutionToolResultBlockFromRaw
     ) => BetaBashCodeExecutionToolResultBlock.FromRawUnchecked(rawData);
 }
 
-[JsonConverter(typeof(ContentConverter))]
-public record class Content : ModelBase
+[JsonConverter(typeof(BetaBashCodeExecutionToolResultBlockContentConverter))]
+public record class BetaBashCodeExecutionToolResultBlockContent : ModelBase
 {
     public object? Value { get; } = null;
 
@@ -138,19 +140,25 @@ public record class Content : ModelBase
         }
     }
 
-    public Content(BetaBashCodeExecutionToolResultError value, JsonElement? element = null)
+    public BetaBashCodeExecutionToolResultBlockContent(
+        BetaBashCodeExecutionToolResultError value,
+        JsonElement? element = null
+    )
     {
         this.Value = value;
         this._element = element;
     }
 
-    public Content(BetaBashCodeExecutionResultBlock value, JsonElement? element = null)
+    public BetaBashCodeExecutionToolResultBlockContent(
+        BetaBashCodeExecutionResultBlock value,
+        JsonElement? element = null
+    )
     {
         this.Value = value;
         this._element = element;
     }
 
-    public Content(JsonElement element)
+    public BetaBashCodeExecutionToolResultBlockContent(JsonElement element)
     {
         this._element = element;
     }
@@ -236,7 +244,7 @@ public record class Content : ModelBase
                 break;
             default:
                 throw new AnthropicInvalidDataException(
-                    "Data did not match any variant of Content"
+                    "Data did not match any variant of BetaBashCodeExecutionToolResultBlockContent"
                 );
         }
     }
@@ -274,15 +282,18 @@ public record class Content : ModelBase
             ),
             BetaBashCodeExecutionResultBlock value => betaBashCodeExecutionResultBlock(value),
             _ => throw new AnthropicInvalidDataException(
-                "Data did not match any variant of Content"
+                "Data did not match any variant of BetaBashCodeExecutionToolResultBlockContent"
             ),
         };
     }
 
-    public static implicit operator Content(BetaBashCodeExecutionToolResultError value) =>
-        new(value);
+    public static implicit operator BetaBashCodeExecutionToolResultBlockContent(
+        BetaBashCodeExecutionToolResultError value
+    ) => new(value);
 
-    public static implicit operator Content(BetaBashCodeExecutionResultBlock value) => new(value);
+    public static implicit operator BetaBashCodeExecutionToolResultBlockContent(
+        BetaBashCodeExecutionResultBlock value
+    ) => new(value);
 
     /// <summary>
     /// Validates that the instance was constructed with a known variant and that this variant is valid
@@ -298,7 +309,9 @@ public record class Content : ModelBase
     {
         if (this.Value == null)
         {
-            throw new AnthropicInvalidDataException("Data did not match any variant of Content");
+            throw new AnthropicInvalidDataException(
+                "Data did not match any variant of BetaBashCodeExecutionToolResultBlockContent"
+            );
         }
         this.Switch(
             (betaBashCodeExecutionToolResultError) =>
@@ -307,7 +320,7 @@ public record class Content : ModelBase
         );
     }
 
-    public virtual bool Equals(Content? other) =>
+    public virtual bool Equals(BetaBashCodeExecutionToolResultBlockContent? other) =>
         other != null
         && this.VariantIndex() == other.VariantIndex()
         && JsonElement.DeepEquals(this.Json, other.Json);
@@ -334,9 +347,10 @@ public record class Content : ModelBase
     }
 }
 
-sealed class ContentConverter : JsonConverter<Content>
+sealed class BetaBashCodeExecutionToolResultBlockContentConverter
+    : JsonConverter<BetaBashCodeExecutionToolResultBlockContent>
 {
-    public override Content? Read(
+    public override BetaBashCodeExecutionToolResultBlockContent? Read(
         ref Utf8JsonReader reader,
         System::Type typeToConvert,
         JsonSerializerOptions options
@@ -380,7 +394,11 @@ sealed class ContentConverter : JsonConverter<Content>
         return new(element);
     }
 
-    public override void Write(Utf8JsonWriter writer, Content value, JsonSerializerOptions options)
+    public override void Write(
+        Utf8JsonWriter writer,
+        BetaBashCodeExecutionToolResultBlockContent value,
+        JsonSerializerOptions options
+    )
     {
         JsonSerializer.Serialize(writer, value.Json, options);
     }
