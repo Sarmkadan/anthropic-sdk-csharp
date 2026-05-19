@@ -47,4 +47,14 @@ public class VersionServiceTest : TestBase
         );
         version.Validate();
     }
+
+    [Fact]
+    public async Task Download_Works()
+    {
+        await this.client.Beta.Skills.Versions.Download(
+            "version",
+            new() { SkillID = "skill_id" },
+            TestContext.Current.CancellationToken
+        );
+    }
 }
