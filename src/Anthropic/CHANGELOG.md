@@ -1,5 +1,13 @@
 # Changelog
 
+## 12.23.1 (2026-05-27)
+
+Full Changelog: [Anthropic-v12.23.0...Anthropic-v12.23.1](https://github.com/anthropics/anthropic-sdk-csharp/compare/Anthropic-v12.23.0...Anthropic-v12.23.1)
+
+### Documentation
+
+* replace literal newlines ([e1ef40d](https://github.com/anthropics/anthropic-sdk-csharp/commit/e1ef40d85394c58ccff1bb76e0bd750cdcab3a45))
+
 ## 12.23.0 (2026-05-21)
 
 Full Changelog: [Anthropic-v12.22.0...Anthropic-v12.23.0](https://github.com/anthropics/anthropic-sdk-csharp/compare/Anthropic-v12.22.0...Anthropic-v12.23.0)
