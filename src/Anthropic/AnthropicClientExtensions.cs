@@ -766,14 +766,17 @@ public static class AnthropicClientExtensions
                         break;
 
                     case RawContentBlockStopEvent contentBlockStop:
-                        if (streamingFunctions is not null)
+                        if (
+                            streamingFunctions is not null
+                            && streamingFunctions.Remove(
+                                contentBlockStop.Index,
+                                out StreamingFunctionData? completedFunction
+                            )
+                        )
                         {
-                            foreach (var sf in streamingFunctions)
-                            {
-                                contents.Add(CreateStreamingToolCallContent(sf.Value));
-                            }
-
-                            streamingFunctions.Clear();
+                            contents.Add(
+                                CreateStreamingToolCallContent(completedFunction)
+                            );
                         }
                         break;
                 }
