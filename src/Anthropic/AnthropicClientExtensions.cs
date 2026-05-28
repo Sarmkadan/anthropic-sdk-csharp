@@ -1263,12 +1263,22 @@ public static class AnthropicClientExtensions
                                 .GetOrCreateTransformedSchema(formatJson)
                                 .GetValueOrDefault();
                             if (
-                                schema.TryGetProperty("properties", out JsonElement properties)
-                                && properties.ValueKind is JsonValueKind.Object
-                                && schema.TryGetProperty("required", out JsonElement required)
-                                && required.ValueKind is JsonValueKind.Array
+                                schema.TryGetProperty("properties", out _)
+                                && schema.TryGetProperty("required", out _)
                             )
                             {
+                                var schemaDict = new Dictionary<string, JsonElement>();
+                                foreach (JsonProperty p in schema.EnumerateObject())
+                                {
+                                    schemaDict[p.Name] = p.Value;
+                                }
+
+                                schemaDict.TryAdd("type", JsonElement.Parse("\"object\""));
+                                schemaDict.TryAdd(
+                                    "additionalProperties",
+                                    JsonElement.Parse("false")
+                                );
+
                                 createParams = createParams with
                                 {
                                     OutputConfig = (
@@ -1277,15 +1287,7 @@ public static class AnthropicClientExtensions
                                     {
                                         Format = new JsonOutputFormat()
                                         {
-                                            Schema = new Dictionary<string, JsonElement>
-                                            {
-                                                ["type"] = JsonElement.Parse("\"object\""),
-                                                ["properties"] = properties,
-                                                ["required"] = required,
-                                                ["additionalProperties"] = JsonElement.Parse(
-                                                    "false"
-                                                ),
-                                            },
+                                            Schema = schemaDict,
                                         },
                                     },
                                 };
