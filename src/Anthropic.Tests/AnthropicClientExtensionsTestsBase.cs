@@ -3061,6 +3061,90 @@ public abstract class AnthropicClientExtensionsTestsBase
     }
 
     [Fact]
+    public async Task GetStreamingResponseAsync_WithParallelToolCalls_EmitsOnlyAtOwnStopEvent()
+    {
+        // Regression test: when tool A stops while tool B still has pending deltas,
+        // only tool A should be emitted — not both.
+        VerbatimHttpHandler handler = new(
+            expectedRequest: """
+            {
+                "max_tokens": 1024,
+                "model": "claude-haiku-4-5",
+                "messages": [{
+                    "role": "user",
+                    "content": [{
+                        "type": "text",
+                        "text": "Call parallel tools"
+                    }]
+                }],
+                "stream": true
+            }
+            """,
+            actualResponse: """
+            event: message_start
+            data: {"type":"message_start","message":{"id":"msg_par_01","type":"message","role":"assistant","model":"claude-haiku-4-5","content":[],"stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":10,"output_tokens":0}}}
+
+            event: content_block_start
+            data: {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"toolu_fast","name":"get_weather","input":{},"caller":{"type":"direct"}}}
+
+            event: content_block_start
+            data: {"type":"content_block_start","index":1,"content_block":{"type":"tool_use","id":"toolu_slow","name":"search_db","input":{},"caller":{"type":"direct"}}}
+
+            event: content_block_delta
+            data: {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"city\":\"Berlin\"}"}}
+
+            event: content_block_delta
+            data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"table\":"}}
+
+            event: content_block_stop
+            data: {"type":"content_block_stop","index":0}
+
+            event: content_block_delta
+            data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"\"users\",\"limit\":50}"}}
+
+            event: content_block_stop
+            data: {"type":"content_block_stop","index":1}
+
+            event: message_delta
+            data: {"type":"message_delta","delta":{"stop_reason":"tool_use","stop_sequence":null},"usage":{"output_tokens":20}}
+
+            event: message_stop
+            data: {"type":"message_stop"}
+
+            """
+        );
+
+        IChatClient chatClient = CreateChatClient(handler, "claude-haiku-4-5");
+
+        List<ChatResponseUpdate> updates = [];
+        await foreach (
+            var update in chatClient.GetStreamingResponseAsync(
+                "Call parallel tools",
+                new(),
+                TestContext.Current.CancellationToken
+            )
+        )
+        {
+            updates.Add(update);
+        }
+
+        var allFunctionCalls = updates
+            .SelectMany(u => u.Contents.OfType<FunctionCallContent>())
+            .ToList();
+
+        Assert.Equal(2, allFunctionCalls.Count);
+
+        var weatherCall = allFunctionCalls.Single(fc => fc.CallId == "toolu_fast");
+        Assert.Equal("get_weather", weatherCall.Name);
+        Assert.Equal("Berlin", weatherCall.Arguments?["city"]?.ToString());
+
+        var dbCall = allFunctionCalls.Single(fc => fc.CallId == "toolu_slow");
+        Assert.Equal("search_db", dbCall.Name);
+        Assert.Equal("users", dbCall.Arguments?["table"]?.ToString());
+        Assert.Equal("50", dbCall.Arguments?["limit"]?.ToString());
+    }
+
+    [Fact]
     public async Task GetResponseAsync_WithAdditionalUsageCounts()
     {
         VerbatimHttpHandler handler = new(
