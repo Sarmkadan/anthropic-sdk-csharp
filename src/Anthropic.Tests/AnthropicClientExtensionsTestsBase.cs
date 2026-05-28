@@ -6245,6 +6245,112 @@ public abstract class AnthropicClientExtensionsTestsBase
     }
 
     [Fact]
+    public async Task GetResponseAsync_WithDefsRefSchema_PreservesDefinitions()
+    {
+        VerbatimHttpHandler handler = new(
+            expectedRequest: """
+            {
+                "max_tokens": 1024,
+                "model": "claude-sonnet-4-5-20250929",
+                "messages": [{
+                    "role": "user",
+                    "content": [{
+                        "type": "text",
+                        "text": "Return a result"
+                    }]
+                }],
+                "output_config": {
+                    "format": {
+                        "type": "json_schema",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "segments": {
+                                    "type": "array",
+                                    "items": { "$ref": "#/$defs/Segment" }
+                                }
+                            },
+                            "required": ["segments"],
+                            "$defs": {
+                                "Segment": {
+                                    "type": "object",
+                                    "properties": {
+                                        "label": { "type": "string" },
+                                        "value": { "type": "integer" }
+                                    },
+                                    "required": ["label", "value"]
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    }
+                }
+            }
+            """,
+            actualResponse: """
+            {
+                "id": "msg_defs_01",
+                "type": "message",
+                "role": "assistant",
+                "model": "claude-sonnet-4-5-20250929",
+                "content": [{
+                    "type": "text",
+                    "text": "{\"segments\":[{\"label\":\"A\",\"value\":1}]}"
+                }],
+                "stop_reason": "end_turn",
+                "usage": {
+                    "input_tokens": 20,
+                    "output_tokens": 10
+                }
+            }
+            """
+        );
+
+        IChatClient chatClient = CreateChatClient(handler, "claude-sonnet-4-5-20250929");
+
+        ChatOptions options = new()
+        {
+            ResponseFormat = ChatResponseFormat.ForJsonSchema(
+                JsonElement.Parse(
+                    """
+                    {
+                        "type": "object",
+                        "properties": {
+                            "segments": {
+                                "type": "array",
+                                "items": { "$ref": "#/$defs/Segment" }
+                            }
+                        },
+                        "required": ["segments"],
+                        "$defs": {
+                            "Segment": {
+                                "type": "object",
+                                "properties": {
+                                    "label": { "type": "string" },
+                                    "value": { "type": "integer" }
+                                },
+                                "required": ["label", "value"]
+                            }
+                        }
+                    }
+                    """
+                ),
+                "SegmentResult"
+            ),
+        };
+
+        ChatResponse response = await chatClient.GetResponseAsync(
+            "Return a result",
+            options,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.NotNull(response);
+        TextContent textContent = Assert.IsType<TextContent>(response.Messages[0].Contents[0]);
+        Assert.Contains("segments", textContent.Text);
+    }
+
+    [Fact]
     public async Task GetResponseAsync_WithNestedObjectSchema_ReturnsStructuredJSON()
     {
         VerbatimHttpHandler handler = new(
