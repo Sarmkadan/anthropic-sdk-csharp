@@ -1,41 +1,15 @@
-## Contributing to documentation
+# Contributing
 
-The documentation for this SDK lives at [platform.claude.com/docs/en/api/sdks/csharp](https://platform.claude.com/docs/en/api/sdks/csharp). To suggest changes, open an issue.
+Contributions are welcome. Please follow these steps:
 
-## Setting up the environment
+1. Fork the repository.
+2. Create a new branch for your feature or fix.
+3. Make your changes, ensuring they follow the existing project structure and conventions.
+4. Run tests to ensure everything is working as expected:
+   ```bash
+   ./scripts/test
+   ```
+5. Submit a pull request.
 
-To set up the repository, run:
-
-```sh
-$ ./scripts/bootstrap
-$ ./scripts/build
-```
-
-This will install required dependencies and build the SDK.
-
-## Modifying/Adding code
-
-Most of the SDK is generated code. Modifications to code will be persisted between generations, but may
-result in merge conflicts between manual patches and changes from the generator. The generator will never
-modify the contents of the `examples/` directory.
-
-## Using the repository from source
-
-To use a local version of this library from source in another project, add it using a directory reference:
-
-```sh
-$ dotnet add reference /path/to/sdk/src/Anthropic
-```
-
-## Formatting and linting
-
-```sh
-$ ./scripts/format
-$ ./scripts/lint
-```
-
-## Running tests
-
-```sh
-$ ./scripts/test
-```
+Please ensure your code is well-formatted and includes appropriate tests.
+The project uses standard .NET tools for building and testing.

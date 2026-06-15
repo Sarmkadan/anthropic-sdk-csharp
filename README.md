@@ -1,15 +1,9 @@
-# Claude SDK for C#
+# Anthropic SDK for C#
 
-[![NuGet Version](https://img.shields.io/nuget/v/Anthropic.svg)](https://www.nuget.org/packages/Anthropic)
+A .NET library for interacting with the Anthropic API.
 
-> [!IMPORTANT]
-> As of version 10+, the `Anthropic` package is now the official Claude SDK for C#. Package versions 3.X and below were previously used for the tryAGI community-built SDK, which has moved to [`tryAGI.Anthropic`](https://www.nuget.org/packages/tryagi.Anthropic/). If you need to continue using the former client in your project, update your package reference to `tryAGI.Anthropic`.
-
-The Claude SDK for C# provides access to the [Claude API](https://docs.anthropic.com/en/api/) from C# applications.
-
-## Documentation
-
-Full documentation is available at **[platform.claude.com/docs/en/api/sdks/csharp](https://platform.claude.com/docs/en/api/sdks/csharp)**.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Build](https://github.com/sarmkadan/anthropic-sdk-csharp/actions/workflows/build.yml/badge.svg)
 
 ## Installation
 
@@ -17,10 +11,9 @@ Full documentation is available at **[platform.claude.com/docs/en/api/sdks/cshar
 dotnet add package Anthropic
 ```
 
-## Getting started
+## Usage
 
 ```csharp
-using System;
 using Anthropic;
 using Anthropic.Models.Messages;
 
@@ -34,25 +27,19 @@ MessageCreateParams parameters = new()
         new()
         {
             Role = Role.User,
-            Content = "Hello, Claude",
+            Content = "Hello",
         },
     ],
-    Model = "claude-opus-4-6",
+    Model = "model-name",
 };
 
 var message = await client.Messages.Create(parameters);
-
-Console.WriteLine(message);
 ```
 
-## Requirements
+## Configuration
 
-.NET Standard 2.0+
+The client can be configured using environment variables or by passing an `AnthropicClientOptions` object.
 
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

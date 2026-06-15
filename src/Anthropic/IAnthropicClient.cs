@@ -104,6 +104,10 @@ public interface IAnthropicClientWithRawResponse : IDisposable
     /// <summary>
     /// Sends a request to the Anthropic REST API.
     /// </summary>
+    /// <typeparam name="T">The type of parameters to send in the request.</typeparam>
+    /// <param name="request">The request to execute.</param>
+    /// <param name="cancellationToken">A token to cancel the request.</param>
+    /// <returns>The HTTP response from the API.</returns>
     Task<HttpResponse> Execute<T>(
         HttpRequest<T> request,
         CancellationToken cancellationToken = default

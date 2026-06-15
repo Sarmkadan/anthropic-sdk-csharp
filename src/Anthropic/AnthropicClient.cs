@@ -132,6 +132,10 @@ public class AnthropicClient : IAnthropicClient
     public AnthropicClient()
         : this(new ClientOptions()) { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AnthropicClient"/> class.
+    /// </summary>
+    /// <param name="options">The options to use for the client.</param>
     public AnthropicClient(ClientOptions options)
     {
         // Auto-resolve credentials when nothing explicit was provided.
