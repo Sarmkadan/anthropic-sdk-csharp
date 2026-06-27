@@ -17,6 +17,7 @@ dotnet add package Anthropic
 using Anthropic;
 using Anthropic.Models.Messages;
 
+// Initialize the client
 AnthropicClient client = new();
 
 MessageCreateParams parameters = new()
@@ -30,11 +31,14 @@ MessageCreateParams parameters = new()
             Content = "Hello",
         },
     ],
-    Model = "model-name",
+    Model = "claude-3-5-sonnet-20241022",
 };
 
+// Create a message
 var message = await client.Messages.Create(parameters);
 ```
+
+For more examples, see the [examples/UsageExamples](examples/UsageExamples) directory.
 
 ## Configuration
 
