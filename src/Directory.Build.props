@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <Authors>Anthropic</Authors>
-    <Company>Anthropic</Company>
-    <PackageTags>sdk;api;http;library</PackageTags>
+    <Authors>Vladyslav Zaiets</Authors>
+    <Company>Vladyslav Zaiets</Company>
+    <PackageTags>anthropic;sdk;dotnet;api</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright 2026 Anthropic</Copyright>
-    <PackageProjectUrl>https://docs.anthropic.com/claude/reference/</PackageProjectUrl>
-    <RepositoryUrl>https://www.github.com/anthropics/anthropic-sdk-csharp</RepositoryUrl>
+    <Copyright>Copyright 2026 Vladyslav Zaiets</Copyright>
+    <PackageProjectUrl>https://github.com/sarmkadan/anthropic-sdk-csharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sarmkadan/anthropic-sdk-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <!-- Strong naming -->
