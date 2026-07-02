@@ -1,0 +1,38 @@
+# Build outputs
+bin/
+obj/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.userprefs
+
+# Build and test artifacts
+*.cache
+*.bak
+*.tmp
+*.swp
+*~
+
+# Test results
+TestResults/
+
+# Local NuGet packages
+*.nupkg
+
+# Environment files
+.env
+.env.local
+
+# Docker
+.docker/
+Dockerfile*.build

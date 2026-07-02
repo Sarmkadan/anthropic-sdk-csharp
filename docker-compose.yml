@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  anthropic-sdk:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/src
+      - ~/.nuget/packages:/root/.nuget/packages
+    environment:
+      - DOTNET_CLI_TELEMETRY_OPTOUT=true
+      - DOTNET_NOLOGO=true
+    working_dir: /src
+    tty: true
+    stdin_open: true
