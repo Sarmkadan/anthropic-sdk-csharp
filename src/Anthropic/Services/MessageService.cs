@@ -33,7 +33,7 @@ public sealed class MessageService : IMessageService
 
     public MessageService(IAnthropicClient client)
     {
-        _client = client;
+        _client = client ?? throw new ArgumentNullException(nameof(client));
 
         _withRawResponse = new(() => new MessageServiceWithRawResponse(client.WithRawResponse));
         _batches = new(() => new BatchService(client));
@@ -51,6 +51,8 @@ public sealed class MessageService : IMessageService
         CancellationToken cancellationToken = default
     )
     {
+        if (parameters == null)
+            throw new ArgumentNullException(nameof(parameters));
         using var response = await this
             .WithRawResponse.Create(parameters, cancellationToken)
             .ConfigureAwait(false);
@@ -63,6 +65,8 @@ public sealed class MessageService : IMessageService
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     )
     {
+        if (parameters == null)
+            throw new ArgumentNullException(nameof(parameters));
         using var response = await this
             .WithRawResponse.CreateStreaming(parameters, cancellationToken)
             .ConfigureAwait(false);
@@ -78,6 +82,8 @@ public sealed class MessageService : IMessageService
         CancellationToken cancellationToken = default
     )
     {
+        if (parameters == null)
+            throw new ArgumentNullException(nameof(parameters));
         using var response = await this
             .WithRawResponse.CountTokens(parameters, cancellationToken)
             .ConfigureAwait(false);
