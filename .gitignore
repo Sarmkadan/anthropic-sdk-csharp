@@ -7,3 +7,6 @@ obj/
 
 # do not edit! excludes generated files used internally
 .artifacts/
+
+# aider internal state - never commit
+.aider*
