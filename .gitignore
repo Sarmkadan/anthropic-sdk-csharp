@@ -10,3 +10,6 @@ obj/
 
 # aider internal state - never commit
 .aider*
+*.user
+TestResults/
+BenchmarkDotNet.Artifacts/
