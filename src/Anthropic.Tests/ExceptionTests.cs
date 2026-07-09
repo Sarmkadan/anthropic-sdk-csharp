@@ -1,3 +1,4 @@
+using System;
 using Anthropic.Exceptions;
 using Xunit;
 
